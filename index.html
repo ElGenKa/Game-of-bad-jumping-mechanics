@@ -4,15 +4,177 @@
     <meta charset="UTF-8">
     <title>Game of bad jumping mechanics</title>
     <link rel="stylesheet" href="css/game.css">
+    <link rel="stylesheet" href="css/bootstrap.min.css">
     <script src="js/jquery-3.4.0.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
     <script src="js/konva.min.js"></script>
+    <script src="js/player.js"></script>
+    <script src="maps/map01.js"></script>
 </head>
 <body>
-<canvas>
-</canvas>
+<div class="container">
+    <div class="row">
+        <div class="col-12 mb-2">
+            Типо меню
+        </div>
+        <div class="col-12">
+            <div class="card">
+                <div class="card-body">
+                    <div id="game" class="w-100">
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-12 text-center">
+            (C) lalki
+        </div>
+    </div>
+</div>
 </body>
 </html>
-
 <script>
+    // сначала создаём контейнер
+    var stage = new Konva.Stage({
+        container: 'game',  // индификатор div контейнера
+        width: 1070,
+        height: 500
+    });
+    /*var playerX = stage.width() / 2;
+    var playerY = stage.height() / 2;
+    var playerKeyPress = {a: false, d: false, l: false, r: false, s: false}*/
+    player.x = stage.width() / 2;
+    player.y = stage.height() / 2;
 
+    // далее создаём слой
+    var layer = new Konva.Layer();
+    initMap01();
+
+    // создаём фигуру
+    player.entity = new Konva.Rect({
+        x: player.x,
+        y: player.y,
+        //radius: 70,
+        width: 70,
+        height: 70,
+        fill: 'red',
+        stroke: 'black',
+        strokeWidth: 4
+    });
+
+    // добавляем круг на слой
+    layer.add(player.entity);
+
+    // добавляем слой
+    stage.add(layer);
+
+    //97 - A
+    //119 - W
+    //100 - D
+    //115 - S
+    //32 - SPACE
+    //44
+    //46
+    $(document).keyup(function (item) {
+        var keyPressed = item.which;
+        switch (keyPressed) {
+            case 65: //A
+                player.keys.a = false;
+                break;
+            case 68: //D
+                player.keys.d = false;
+                break;
+            case 37: //left
+                player.keys.l = false;
+                break;
+            case 39: //right
+                player.keys.r = false;
+                break;
+            case 32: //SPACE
+                player.keys.s = false;
+                break;
+        }
+    });
+    $(document).keydown(function (item) {
+        var keyPressed = item.which;
+        switch (keyPressed) {
+            case 65: //A
+                //console.log(true);
+                player.keys.a = true;
+                break;
+            case 68: //D
+                player.keys.d = true;
+                break;
+            case 37: //left
+                player.keys.l = true;
+                break;
+            case 39: //right
+                player.keys.r = true;
+                break;
+            case 32: //SPACE
+                //console.log(layer.children);
+                player.keys.s = true;
+                break;
+        }
+    });
+    setInterval(function () {
+
+        var findBox = false;
+        layer.children.each(function (item) {
+            if (item.attrs.name === 'box') {
+                if (item.getClientRect().y > player.entity.getClientRect().y)
+                    if (haveIntersection(item.getClientRect(), player.entity.getClientRect())) {
+                        player.y = item.getClientRect().y-69;
+                        player.status = 'idle';
+                        player.gravityPower = 0;
+                        findBox = true;
+                    }
+            }
+        });
+        if (!findBox){
+            player.y += 2.5 + player.gravityPower;
+            player.gravityPower += 2.5;
+        }
+
+        if (player.keys.a) {
+            player.x -= 5;
+        }
+        if (player.keys.d) {
+            player.x += 5;
+        }
+        if (player.keys.l) {
+
+        }
+        if (player.keys.r) {
+
+        }
+        if (player.keys.s && player.status === 'idle') {
+            player.status = 'jumped';
+            player.y -= 4;
+            player.jumpPower = 25;
+        }
+        if(player.jumpPower > 0){
+            player.y -= player.jumpPower;
+            player.jumpPower -= 2.5;
+        }
+
+        render();
+    }, 33);
+
+    function render() {
+        //console.log(playerX);
+        layer.clear();
+        player.entity.x(player.x);
+        player.entity.y(player.y);
+        layer.draw();
+    }
+
+    function haveIntersection(r1, r2) {
+        return !(
+            r2.x > r1.x + r1.width ||
+            r2.x + r2.width < r1.x ||
+            r2.y > r1.y + r1.height ||
+            r2.y + r2.height < r1.y
+        );
+    }
 </script>
