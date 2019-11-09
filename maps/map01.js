@@ -1,15 +1,9 @@
-function initMap01() {
-    for(var i = 0; i< 3; i++){
-        var shape = new Konva.Rect({
-            width: 140,
-            height: 30,
-            x: 200 + (i*160),
-            y: 320 + (i*40),
-            name: 'box',
-            fill: 'blue',
-            stroke: 'black',
-            strokeWidth: 2
-        });
-        layer.add(shape);
-    }
-}
+var map01 = [
+    {x: 10, y: 50},
+    {x: 200, y: 50},
+    {x: 0, y: 400},
+    {x: 140, y: 450},
+    {x: 290, y: 495},
+    {x: 450, y: 580},
+    {x: 650, y: 630},
+];

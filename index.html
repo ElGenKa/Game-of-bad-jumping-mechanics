@@ -9,13 +9,17 @@
     <script src="js/bootstrap.min.js"></script>
     <script src="js/konva.min.js"></script>
     <script src="js/player.js"></script>
+    <script src="js/engine.js"></script>
+    <script src="js/map.js"></script>
     <script src="maps/map01.js"></script>
 </head>
 <body>
 <div class="container">
     <div class="row">
         <div class="col-12 mb-2">
-            Типо меню
+            <a href="#">Уровень 1</a>
+            <a href="#">Уровень 2</a>
+            <a href="#">Уровень 3</a>
         </div>
         <div class="col-12">
             <div class="card">
@@ -34,147 +38,103 @@
 </body>
 </html>
 <script>
-    // сначала создаём контейнер
+
+    //Загрузим текстуры
+    var sources = {
+        box: 'box.png',
+        playerLeft: 'playerLeft.png',
+        playerRight: 'playerRight.png',
+        playerJumpLeft: 'playerJumpLeft.png',
+        playerJumpRight: 'playerJumpRight.png'
+    };
+    engine.loadImages(sources);
+
+    //создаём контейнер
     var stage = new Konva.Stage({
         container: 'game',  // индификатор div контейнера
         width: 1070,
         height: 500
     });
-    /*var playerX = stage.width() / 2;
-    var playerY = stage.height() / 2;
-    var playerKeyPress = {a: false, d: false, l: false, r: false, s: false}*/
+    // далее создаём слой хитбоксов
+    var layerHits = new Konva.Layer();
+    var layerImg = new Konva.Layer();
+    // далее инициализируем карту
+    initMap(map01);
+
+    // зададим начальные координаты игрока (центр)
     player.x = stage.width() / 2;
     player.y = stage.height() / 2;
 
-    // далее создаём слой
-    var layer = new Konva.Layer();
-    initMap01();
-
-    // создаём фигуру
+    // создадим фигуру игрока
     player.entity = new Konva.Rect({
         x: player.x,
         y: player.y,
-        //radius: 70,
-        width: 70,
-        height: 70,
-        fill: 'red',
-        stroke: 'black',
-        strokeWidth: 4
+        name: 'player',
+        width: 25,
+        height: 25
     });
 
-    // добавляем круг на слой
-    layer.add(player.entity);
+    //Подтянем для него текстуры
+    player.entityImage.left = new Konva.Image({
+        image: engine.images['playerLeft'],
+        x: player.x-5,
+        y: player.y-5,
+        name: 'player',
+        width: 35,
+        height: 35
+    });
 
-    // добавляем слой
-    stage.add(layer);
+    player.entityImage.right = new Konva.Image({
+        image: engine.images['playerRight'],
+        x: -500,
+        y: player.y-5,
+        name: 'player',
+        width: 35,
+        height: 35
+    });
 
-    //97 - A
-    //119 - W
-    //100 - D
-    //115 - S
-    //32 - SPACE
-    //44
-    //46
+    player.entityImage.jumpLeft = new Konva.Image({
+        image: engine.images['playerJumpLeft'],
+        x: -500,
+        y: player.y-5,
+        name: 'player',
+        width: 35,
+        height: 35
+    });
+
+    player.entityImage.jumpRight = new Konva.Image({
+        image: engine.images['playerJumpRight'],
+        x: -500,
+        y: player.y-5,
+        name: 'player',
+        width: 35,
+        height: 35
+    });
+
+    // добавляем игрока на слой
+    layerHits.add(player.entity);
+    //Добавляем текстуры
+    layerImg.add(player.entityImage.left);
+    layerImg.add(player.entityImage.right);
+    layerImg.add(player.entityImage.jumpLeft);
+    layerImg.add(player.entityImage.jumpRight);
+
+    // добавляем слои
+    stage.add(layerHits);
+    stage.add(layerImg);
+
+    //Отлавливаем нажатия клавишь
     $(document).keyup(function (item) {
         var keyPressed = item.which;
-        switch (keyPressed) {
-            case 65: //A
-                player.keys.a = false;
-                break;
-            case 68: //D
-                player.keys.d = false;
-                break;
-            case 37: //left
-                player.keys.l = false;
-                break;
-            case 39: //right
-                player.keys.r = false;
-                break;
-            case 32: //SPACE
-                player.keys.s = false;
-                break;
-        }
+        player.keys.kUp(keyPressed);
     });
     $(document).keydown(function (item) {
         var keyPressed = item.which;
-        switch (keyPressed) {
-            case 65: //A
-                //console.log(true);
-                player.keys.a = true;
-                break;
-            case 68: //D
-                player.keys.d = true;
-                break;
-            case 37: //left
-                player.keys.l = true;
-                break;
-            case 39: //right
-                player.keys.r = true;
-                break;
-            case 32: //SPACE
-                //console.log(layer.children);
-                player.keys.s = true;
-                break;
-        }
+        player.keys.kDown(keyPressed);
     });
+
+    //Запускаем цикл игры
     setInterval(function () {
-
-        var findBox = false;
-        layer.children.each(function (item) {
-            if (item.attrs.name === 'box') {
-                if (item.getClientRect().y > player.entity.getClientRect().y)
-                    if (haveIntersection(item.getClientRect(), player.entity.getClientRect())) {
-                        player.y = item.getClientRect().y-69;
-                        player.status = 'idle';
-                        player.gravityPower = 0;
-                        findBox = true;
-                    }
-            }
-        });
-        if (!findBox){
-            player.y += 2.5 + player.gravityPower;
-            player.gravityPower += 2.5;
-        }
-
-        if (player.keys.a) {
-            player.x -= 5;
-        }
-        if (player.keys.d) {
-            player.x += 5;
-        }
-        if (player.keys.l) {
-
-        }
-        if (player.keys.r) {
-
-        }
-        if (player.keys.s && player.status === 'idle') {
-            player.status = 'jumped';
-            player.y -= 4;
-            player.jumpPower = 25;
-        }
-        if(player.jumpPower > 0){
-            player.y -= player.jumpPower;
-            player.jumpPower -= 2.5;
-        }
-
-        render();
-    }, 33);
-
-    function render() {
-        //console.log(playerX);
-        layer.clear();
-        player.entity.x(player.x);
-        player.entity.y(player.y);
-        layer.draw();
-    }
-
-    function haveIntersection(r1, r2) {
-        return !(
-            r2.x > r1.x + r1.width ||
-            r2.x + r2.width < r1.x ||
-            r2.y > r1.y + r1.height ||
-            r2.y + r2.height < r1.y
-        );
-    }
+        engine.render();
+    }, 10);
 </script>
