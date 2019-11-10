@@ -38,7 +38,6 @@
 </body>
 </html>
 <script>
-
     //Загрузим текстуры
     var sources = {
         box: 'box.png',
@@ -55,9 +54,8 @@
         width: 1070,
         height: 500
     });
-    // далее создаём слой хитбоксов
+    // далее создаём слой
     var layerHits = new Konva.Layer();
-    var layerImg = new Konva.Layer();
     // далее инициализируем карту
     initMap(map01);
 
@@ -75,7 +73,7 @@
     });
 
     //Подтянем для него текстуры
-    player.entityImage.left = new Konva.Image({
+    player.entityImage = new Konva.Image({
         image: engine.images['playerLeft'],
         x: player.x-5,
         y: player.y-5,
@@ -84,44 +82,13 @@
         height: 35
     });
 
-    player.entityImage.right = new Konva.Image({
-        image: engine.images['playerRight'],
-        x: -500,
-        y: player.y-5,
-        name: 'player',
-        width: 35,
-        height: 35
-    });
-
-    player.entityImage.jumpLeft = new Konva.Image({
-        image: engine.images['playerJumpLeft'],
-        x: -500,
-        y: player.y-5,
-        name: 'player',
-        width: 35,
-        height: 35
-    });
-
-    player.entityImage.jumpRight = new Konva.Image({
-        image: engine.images['playerJumpRight'],
-        x: -500,
-        y: player.y-5,
-        name: 'player',
-        width: 35,
-        height: 35
-    });
-
     // добавляем игрока на слой
     layerHits.add(player.entity);
+    layerHits.add(player.entityImage);
     //Добавляем текстуры
-    layerImg.add(player.entityImage.left);
-    layerImg.add(player.entityImage.right);
-    layerImg.add(player.entityImage.jumpLeft);
-    layerImg.add(player.entityImage.jumpRight);
 
     // добавляем слои
     stage.add(layerHits);
-    stage.add(layerImg);
 
     //Отлавливаем нажатия клавишь
     $(document).keyup(function (item) {

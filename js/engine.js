@@ -4,14 +4,14 @@ engine = {
     images: {},
     render: function () {
         layerHits.clear();
-        layerImg.clear();
+        //layerImg.clear();
 
         player.collisions.checkCollision();
         player.keys.checkKeys();
         player.gravity.check();
 
         layerHits.draw();
-        layerImg.draw();
+        //layerImg.draw();
     },
     haveIntersectionX: function (r1, r2) {
         return !(
@@ -36,19 +36,6 @@ engine = {
     },
     moveAllEntities: function (x = 0, y = 0) {
         layerHits.children.each(function (item) {
-            if (item.attrs.name !== 'player') {
-                if (x) {
-                    var newX = item.attrs.x + x;
-                    item.x(newX);
-                }
-                if (y) {
-                    var newY = item.attrs.y + y;
-                    item.y(newY);
-                }
-            }
-        });
-
-        layerImg.children.each(function (item) {
             if (item.attrs.name !== 'player') {
                 if (x) {
                     var newX = item.attrs.x + x;

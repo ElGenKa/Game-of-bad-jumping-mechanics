@@ -5,6 +5,7 @@ function initMap(map) {
             height: 30,
             x: item.x,
             y: item.y,
+            name: 'box'
         });
 
         var shapeImage = new Konva.Image({
@@ -13,10 +14,10 @@ function initMap(map) {
             y: item.y,
             width: 140,
             height: 30,
-            name: 'box'
-
+            name: 'boxImage'
         });
         layerHits.add(shape);
-        layerImg.add(shapeImage);
+        layerHits.add(shapeImage);
+        //layerImg.add(shapeImage);
     });
 }

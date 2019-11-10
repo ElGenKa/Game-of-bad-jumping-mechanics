@@ -49,16 +49,17 @@ player = {
             }
         },
         checkKeys: function () {
-            //player.collisions.checkCollision();
-            player.entityImage.allHide();
+            player.collisions.checkCollision();
+            //player.entityImage.allHide();
+            //console.log(player.collisions);
             if (player.keys.a) {
                 if (!player.collisions.leftBox) {
                     engine.cameraMoveX(-3);
                 }
                 if (player.status === 'jumped') {
-                    player.entityImage.jumpLeft.x(player.x - 5);
+                    player.entityImage.image(engine.images['playerJumpLeft'])
                 } else {
-                    player.entityImage.left.x(player.x - 5);
+                    player.entityImage.image(engine.images['playerLeft'])
                 }
             }
             if (player.keys.d) {
@@ -66,9 +67,9 @@ player = {
                     engine.cameraMoveX(3);
                 }
                 if (player.status === 'jumped') {
-                    player.entityImage.jumpRight.x(player.x - 5);
+                    player.entityImage.image(engine.images['playerJumpRight'])
                 } else {
-                    player.entityImage.right.x(player.x - 5);
+                    player.entityImage.image(engine.images['playerRight'])
                 }
             }
             if (player.keys.s) {
@@ -81,8 +82,8 @@ player = {
                     }
                 }
             }
-            if (!player.keys.a && !player.keys.d){
-                player.entityImage.left.x(player.x - 5);
+            if (!player.keys.a && !player.keys.d) {
+                //player.entityImage.left.x(player.x - 5);
             }
         }
     },
@@ -96,32 +97,39 @@ player = {
             layerHits.children.each(function (item) {
                 var itemR = item.getClientRect();
                 var playerR = player.entity.getClientRect();
-                if (itemR.x < playerR.x) {
-                    if (engine.haveIntersectionY(itemR, playerR)) {
-                        if (engine.haveIntersectionX(itemR, playerR)) {
+                if (item.attrs.name !== 'boxImage' && item.attrs.name !== 'player') {
+
+                    /*if (engine.haveIntersection(itemR, playerR)) {
+                        if (itemR.y + 4 < playerR.y)
+                            engine.cameraMoveY(-1);
+                    }*/
+
+                    if (itemR.x < playerR.x) {
+                        if (engine.haveIntersectionY(itemR, playerR)) {
+                            if (engine.haveIntersectionX(itemR, playerR)) {
+                                if (playerR.y > itemR.y)
+                                    player.collisions.leftBox = true;
+                            }
+                        }
+                    }
+                    if (itemR.x > playerR.x) {
+                        if (engine.haveIntersectionY(itemR, playerR)) {
                             if (playerR.y > itemR.y)
-                                player.collisions.leftBox = true;
+                                player.collisions.rightBox = true;
                         }
                     }
-                }
-                if (itemR.x > playerR.x) {
-                    if (engine.haveIntersectionY(itemR, playerR)) {
-                        if (playerR.y > itemR.y)
-                            player.collisions.rightBox = true;
-                    }
-                }
-                if (itemR.y > playerR.y) {
-                    if (engine.haveIntersectionY(itemR, playerR)) {
-                        if (engine.haveIntersectionX(itemR, playerR)) {
-                            player.collisions.bottomBox = true;
-                            //console.log(itemR.y - playerR.y);
+                    if (itemR.y > playerR.y) {
+                        if (engine.haveIntersectionY(itemR, playerR)) {
+                            if (engine.haveIntersectionX(itemR, playerR)) {
+                                player.collisions.bottomBox = true;
+                            }
                         }
                     }
-                }
-                if (itemR.y < playerR.y) {
-                    if (engine.haveIntersectionY(itemR, playerR)) {
-                        if (engine.haveIntersectionX(itemR, playerR)) {
-                            player.collisions.topBox = true;
+                    if (itemR.y < playerR.y) {
+                        if (engine.haveIntersectionY(itemR, playerR)) {
+                            if (engine.haveIntersectionX(itemR, playerR)) {
+                                player.collisions.topBox = true;
+                            }
                         }
                     }
                 }
@@ -130,18 +138,7 @@ player = {
     },
     status: 'idle',
     entity: null,
-    entityImage: {
-        left: null,
-        right: null,
-        jumpLeft: null,
-        jumpRight: null,
-        allHide: function () {
-            player.entityImage.left.x(-500);
-            player.entityImage.right.x(-500);
-            player.entityImage.jumpLeft.x(-500);
-            player.entityImage.jumpRight.x(-500);
-        }
-    },
+    entityImage: null,
     gravity: {
         jumpPower: 0,
         gravityPower: 0,
