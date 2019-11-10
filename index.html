@@ -12,14 +12,16 @@
     <script src="js/engine.js"></script>
     <script src="js/map.js"></script>
     <script src="maps/map01.js"></script>
+    <script src="maps/map02.js"></script>
+    <script src="maps/map03.js"></script>
 </head>
 <body>
 <div class="container">
     <div class="row">
         <div class="col-12 mb-2">
-            <a href="#">Уровень 1</a>
-            <a href="#">Уровень 2</a>
-            <a href="#">Уровень 3</a>
+            <a href="#" class="mapSelector" id="loadLvl1" data-map="map01">Уровень 1</a>
+            <a href="#" class="mapSelector" id="loadLvl2" data-map="map02">Уровень 2</a>
+            <a href="#" class="mapSelector" id="loadLvl3" data-map="map03">Уровень 3</a>
         </div>
         <div class="col-12">
             <div class="card">
@@ -30,8 +32,8 @@
                 </div>
             </div>
         </div>
-        <div class="col-12 text-center">
-            (C) lalki
+        <div class="col-12">
+            <label>bottom box: </label><label id="lJumpPower"></label><br>
         </div>
     </div>
 </div>
@@ -39,6 +41,7 @@
 </html>
 <script>
     //Загрузим текстуры
+    engine.ini();
     var sources = {
         box: 'box.png',
         playerLeft: 'playerLeft.png',
@@ -56,8 +59,9 @@
     });
     // далее создаём слой
     var layerHits = new Konva.Layer();
+
     // далее инициализируем карту
-    initMap(map01);
+    initMap(engine.selectMap);
 
     // зададим начальные координаты игрока (центр)
     player.x = stage.width() / 2;
@@ -104,4 +108,8 @@
     setInterval(function () {
         engine.render();
     }, 10);
+
+    setInterval(function () {
+        $("#lJumpPower").html(player.collisions.bottomBox);
+    }, 1);
 </script>

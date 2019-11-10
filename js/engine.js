@@ -2,16 +2,40 @@ var engine;
 
 engine = {
     images: {},
+    selectMap: null,
+    ini: function(){
+        var selMap = localStorage.getItem('selectMap');
+        if(selMap){
+            switch (selMap) {
+                case 'map01':
+                    engine.selectMap = map01;
+                    break;
+                case 'map02':
+                    engine.selectMap = map02;
+                    break;
+                case 'map03':
+                    engine.selectMap = map03;
+                    break;
+                default:
+                    engine.selectMap = map01;
+                    break;
+            }
+        }
+        else
+            engine.selectMap = map01;
+
+        $('.mapSelector').on('click', function (item) {
+            localStorage.setItem('selectMap', $(item.currentTarget).data('map'));
+            location.reload();
+        });
+    },
+
     render: function () {
         layerHits.clear();
-        //layerImg.clear();
-
         player.collisions.checkCollision();
         player.keys.checkKeys();
         player.gravity.check();
-
         layerHits.draw();
-        //layerImg.draw();
     },
     haveIntersectionX: function (r1, r2) {
         return !(

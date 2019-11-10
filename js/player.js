@@ -50,8 +50,6 @@ player = {
         },
         checkKeys: function () {
             player.collisions.checkCollision();
-            //player.entityImage.allHide();
-            //console.log(player.collisions);
             if (player.keys.a) {
                 if (!player.collisions.leftBox) {
                     engine.cameraMoveX(-3);
@@ -78,12 +76,11 @@ player = {
                         engine.cameraMoveY(-10);
                         player.status = 'jumped';
                         player.gravity.jumpPower = 10;
-                        player.gravity.gravityPower = 0;
                     }
                 }
             }
             if (!player.keys.a && !player.keys.d) {
-                //player.entityImage.left.x(player.x - 5);
+                player.entityImage.image(engine.images['playerLeft'])
             }
         }
     },
@@ -95,45 +92,49 @@ player = {
         checkCollision: function () {
             player.collisions.leftBox = player.collisions.topBox = player.collisions.rightBox = player.collisions.bottomBox = false;
             layerHits.children.each(function (item) {
-                var itemR = item.getClientRect();
-                var playerR = player.entity.getClientRect();
-                if (item.attrs.name !== 'boxImage' && item.attrs.name !== 'player') {
+                    var itemR = item.getClientRect();
+                    var playerR = player.entity.getClientRect();
+                    if (item.attrs.name !== 'boxImage' && item.attrs.name !== 'player') {
 
-                    /*if (engine.haveIntersection(itemR, playerR)) {
-                        if (itemR.y + 4 < playerR.y)
-                            engine.cameraMoveY(-1);
-                    }*/
-
-                    if (itemR.x < playerR.x) {
-                        if (engine.haveIntersectionY(itemR, playerR)) {
-                            if (engine.haveIntersectionX(itemR, playerR)) {
-                                if (playerR.y > itemR.y)
-                                    player.collisions.leftBox = true;
+                        if (itemR.x < playerR.x) {
+                            if (engine.haveIntersectionY(itemR, playerR)) {
+                                if (engine.haveIntersectionX(itemR, playerR)) {
+                                    if (playerR.y > itemR.y)
+                                        player.collisions.leftBox = true;
+                                }
                             }
                         }
-                    }
-                    if (itemR.x > playerR.x) {
-                        if (engine.haveIntersectionY(itemR, playerR)) {
-                            if (playerR.y > itemR.y)
-                                player.collisions.rightBox = true;
-                        }
-                    }
-                    if (itemR.y > playerR.y) {
-                        if (engine.haveIntersectionY(itemR, playerR)) {
-                            if (engine.haveIntersectionX(itemR, playerR)) {
-                                player.collisions.bottomBox = true;
+                        if (itemR.x > playerR.x) {
+                            if (engine.haveIntersectionY(itemR, playerR)) {
+                                if (engine.haveIntersectionX(itemR, playerR)) {
+                                    if (playerR.y > itemR.y)
+                                        player.collisions.rightBox = true;
+                                }
                             }
                         }
-                    }
-                    if (itemR.y < playerR.y) {
-                        if (engine.haveIntersectionY(itemR, playerR)) {
-                            if (engine.haveIntersectionX(itemR, playerR)) {
-                                player.collisions.topBox = true;
+                        if (itemR.y > playerR.y) {
+                            if (engine.haveIntersectionY(itemR, playerR)) {
+                                if (engine.haveIntersectionX(itemR, playerR)) {
+                                    if (engine.haveIntersection(itemR, playerR)) {
+                                        if (itemR.y < playerR.y + 24)
+                                            engine.cameraMoveY(-1);
+                                    }
+                                    player.collisions.bottomBox = true;
+                                    player.status = 'idle';
+                                    player.gravity.jumpPower = 0;
+                                }
+                            }
+                        }
+                        if (itemR.y < playerR.y) {
+                            if (engine.haveIntersectionY(itemR, playerR)) {
+                                if (engine.haveIntersectionX(itemR, playerR)) {
+                                    player.collisions.topBox = true;
+                                }
                             }
                         }
                     }
                 }
-            });
+            );
         }
     },
     status: 'idle',
@@ -141,17 +142,17 @@ player = {
     entityImage: null,
     gravity: {
         jumpPower: 0,
-        gravityPower: 0,
         check: function () {
             if (!player.collisions.bottomBox) {
-                player.gravity.jumpPower -= 0.25;
-                player.gravity.gravityPower += 0.25;
+                if (player.keys.s)
+                    player.gravity.jumpPower -= 0.25;
+                else
+                    player.gravity.jumpPower -= 0.50;
             } else {
                 player.gravity.jumpPower = 0;
-                player.gravity.gravityPower = 0;
                 player.status = 'idle';
             }
-            engine.cameraMoveY(((player.gravity.jumpPower * -1) + player.gravity.gravityPower));
+            engine.cameraMoveY((player.gravity.jumpPower * -1));
         }
     }
 };

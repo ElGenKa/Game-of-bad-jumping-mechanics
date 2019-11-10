@@ -18,6 +18,5 @@ function initMap(map) {
         });
         layerHits.add(shape);
         layerHits.add(shapeImage);
-        //layerImg.add(shapeImage);
     });
 }
