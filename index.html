@@ -14,6 +14,8 @@
     <script src="maps/map01.js"></script>
     <script src="maps/map02.js"></script>
     <script src="maps/map03.js"></script>
+    <script src="js/npc.js"></script>
+    <script src="js/assetSources.js"></script>
 </head>
 <body>
 <div class="container">
@@ -42,18 +44,6 @@
 <script>
     //Загрузим текстуры
     engine.ini();
-    var sources = {
-        box: 'box.png',
-        boxSmall: 'boxSmall.png',
-        boxBig: 'boxBig.png',
-        boxMysterious: 'boxMysterious.png',
-        boxMysteriousEmpty: 'boxMysteriousEmpty.png',
-        playerLeft: 'playerLeft.png',
-        playerRight: 'playerRight.png',
-        playerJumpLeft: 'playerJumpLeft.png',
-        playerJumpRight: 'playerJumpRight.png'
-    };
-    engine.loadImages(sources);
 
     //создаём контейнер
     var stage = new Konva.Stage({
@@ -61,8 +51,10 @@
         width: 1070,
         height: 500
     });
+
     // далее создаём слой
     var layerHits = new Konva.Layer();
+    var layerInterface = new Konva.Layer();
 
     // далее инициализируем карту
     initMap(engine.selectMap);
@@ -97,6 +89,7 @@
 
     // добавляем слои
     stage.add(layerHits);
+    stage.add(layerInterface);
 
     //Отлавливаем нажатия клавишь
     $(document).keyup(function (item) {
@@ -114,6 +107,6 @@
     }, 10);
 
     setInterval(function () {
-        $("#lScore").html(player.score);
+        $("#lScore").html(player.score + " lives: "+ player.lives);
     }, 1);
 </script>

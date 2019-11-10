@@ -42,31 +42,36 @@ function initMap(map) {
                 h = 30;
                 image = engine.images['boxMysterious'];
                 break;
+            case 'npc':
+                engine.npcs[engine.npcI] = new Npc(x, y, item.tNpc);
+                break;
         }
 
-        entity = new Konva.Rect({
-            x: x,
-            y: y,
-            width: w,
-            height: h,
-            id: 'box-' + i,
-            idImage: 'image-' + i,
-            name: nameHit
-        });
+        if(item.t !== 'npc') {
+            entity = new Konva.Rect({
+                x: x,
+                y: y,
+                width: w,
+                height: h,
+                id: 'box-' + i,
+                idImage: 'image-' + i,
+                name: nameHit
+            });
 
-        entityImage = new Konva.Image({
-            image: image,
-            x: x,
-            y: y,
-            width: w,
-            height: h,
-            id: 'image-' + i,
-            idBox: 'box-' + i,
-            name: nameImage
-        });
+            entityImage = new Konva.Image({
+                image: image,
+                x: x,
+                y: y,
+                width: w,
+                height: h,
+                id: 'image-' + i,
+                idBox: 'box-' + i,
+                name: nameImage
+            });
 
-        layerHits.add(entity);
-        layerHits.add(entityImage);
-        i++;
+            layerHits.add(entity);
+            layerHits.add(entityImage);
+            i++;
+        }
     });
 }

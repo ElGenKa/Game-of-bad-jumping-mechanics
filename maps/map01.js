@@ -3,6 +3,7 @@ var map01 = [
     {x: 200, y: 50, t: 'platform-medium'},
     {x: 0, y: 400, t: 'platform-medium'},
     {x: 0, y: 300, t: 'mysterious'},
+    {x: 0, y: 350, t: 'npc', tNpc: 'snake'},
     {x: -300, y: 300, t: 'platform-big'},
     {x: -380, y: 300, t: 'platform-small'},
     {x: -330, y: 200, t: 'platform-big'},

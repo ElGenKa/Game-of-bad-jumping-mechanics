@@ -94,20 +94,28 @@ player = {
             layerHits.children.each(function (item) {
                     var itemR = item.getClientRect();
                     var playerR = player.entity.getClientRect();
-                    if (item.attrs.name !== 'boxImage' && item.attrs.name !== 'player') {
+                    if (item.attrs.name !== 'boxImage' && item.attrs.name !== 'player' && item.attrs.name !== 'npcImage') {
                         if (itemR.x < playerR.x) {
                             if (engine.haveIntersectionY(itemR, playerR)) {
                                 if (engine.haveIntersectionX(itemR, playerR)) {
-                                    if (playerR.y > itemR.y)
+                                    if (playerR.y > itemR.y) {
                                         player.collisions.leftBox = true;
+                                        if (item.attrs.name === 'npc') {
+                                            player.collisions.checkNpc(engine.npcs[item.attrs.npcID], 'left');
+                                        }
+                                    }
                                 }
                             }
                         }
                         if (itemR.x > playerR.x) {
                             if (engine.haveIntersectionY(itemR, playerR)) {
                                 if (engine.haveIntersectionX(itemR, playerR)) {
-                                    if (playerR.y > itemR.y)
+                                    if (playerR.y > itemR.y) {
                                         player.collisions.rightBox = true;
+                                        if (item.attrs.name === 'npc') {
+                                            player.collisions.checkNpc(engine.npcs[item.attrs.npcID], 'right');
+                                        }
+                                    }
                                 }
                             }
                         }
@@ -121,6 +129,9 @@ player = {
                                     player.collisions.bottomBox = true;
                                     player.status = 'idle';
                                     player.gravity.jumpPower = 0;
+                                    if (item.attrs.name === 'npc') {
+                                        player.collisions.checkNpc(engine.npcs[item.attrs.npcID], 'bottom');
+                                    }
                                 }
                             }
                         }
@@ -138,19 +149,49 @@ player = {
                                             player.score += 100;
                                         item.name('mysteriousEmpty');
                                     }
+                                    if (item.attrs.name === 'npc') {
+                                        player.collisions.checkNpc(engine.npcs[item.attrs.npcID], 'top');
+                                    }
                                 }
                             }
                         }
                     }
                 }
             );
+        },
+        checkNpc: function (npc, direction) {
+            if(npc.killer){
+                if(direction === 'left' || direction === 'right' || direction === 'bottom'){
+                    //player.lives -=1;
+                    if(direction === 'left') {
+                        player.gravity.gravityLeft = 6;
+                        player.gravity.jumpPower = 10;
+                        engine.cameraMoveY(-10);
+                        engine.cameraMoveX(10);
+                    }
+                    if(direction === 'right') {
+                        player.gravity.gravityRight = 15;
+                        player.gravity.jumpPower = 10;
+                        engine.cameraMoveY(-10);
+                        engine.cameraMoveX(-10);
+                    }
+                    if(direction === 'bottom'){
+                        engine.cameraMoveY(-10);
+                        player.gravity.jumpPower = 5;
+                    }
+
+                }
+            }
         }
     },
     status: 'idle',
     entity: null,
     entityImage: null,
     score: 0,
+    lives: 3,
     gravity: {
+        gravityLeft: 0,
+        gravityRight: 0,
         jumpPower: 0,
         check: function () {
             if (!player.collisions.bottomBox) {
@@ -163,6 +204,19 @@ player = {
                 player.status = 'idle';
             }
             engine.cameraMoveY((player.gravity.jumpPower * -1));
+
+            if(player.gravity.gravityLeft>0){
+                if (!player.collisions.rightBox) {
+                    engine.cameraMoveX(player.gravity.gravityLeft);
+                }
+                player.gravity.gravityLeft -=0.25;
+            }
+            if(player.gravity.gravityRight>0){
+                if (!player.collisions.leftBox) {
+                    engine.cameraMoveX(-player.gravity.gravityRight);
+                }
+                player.gravity.gravityRight -=0.25;
+            }
         }
     }
 };

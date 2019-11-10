@@ -3,7 +3,11 @@ var engine;
 engine = {
     images: {},
     selectMap: null,
+    npcI: 0,
+    renderFrame: 0,
+    npcs: [],
     ini: function(){
+        engine.loadImages(sources);
         var selMap = localStorage.getItem('selectMap');
         if(selMap){
             switch (selMap) {
@@ -35,29 +39,45 @@ engine = {
         player.collisions.checkCollision();
         player.keys.checkKeys();
         player.gravity.check();
+
+        if (this.renderFrame%2 !== 1) {
+            if (engine.npcs) {
+                engine.npcs.forEach(function (item) {
+                    item.upd();
+                });
+            }
+        }
+
         layerHits.draw();
+        this.renderFrame +=1;
     },
+
     haveIntersectionX: function (r1, r2) {
         return !(
             r2.x > r1.x + r1.width ||
             r2.x + r2.width < r1.x
         );
     },
+
     haveIntersectionY: function (r1, r2) {
         return !(
             r2.y > r1.y + r1.height ||
             r2.y + r2.height < r1.y
         );
     },
+
     haveIntersection: function (r1, r2) {
         return (this.haveIntersectionX(r1, r2) || this.haveIntersectionY(r1, r2))
     },
+
     cameraMoveX: function (x) {
         this.moveAllEntities((x * -1));
     },
+
     cameraMoveY: function (y) {
         this.moveAllEntities(0, (y * -1));
     },
+
     moveAllEntities: function (x = 0, y = 0) {
         layerHits.children.each(function (item) {
             if (item.attrs.name !== 'player') {
@@ -72,6 +92,7 @@ engine = {
             }
         });
     },
+
     loadImages: function (sources) {
         var assetDir = 'assets/';
         engine.images = {};
