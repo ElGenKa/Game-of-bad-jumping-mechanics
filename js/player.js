@@ -95,7 +95,6 @@ player = {
                     var itemR = item.getClientRect();
                     var playerR = player.entity.getClientRect();
                     if (item.attrs.name !== 'boxImage' && item.attrs.name !== 'player') {
-
                         if (itemR.x < playerR.x) {
                             if (engine.haveIntersectionY(itemR, playerR)) {
                                 if (engine.haveIntersectionX(itemR, playerR)) {
@@ -129,6 +128,16 @@ player = {
                             if (engine.haveIntersectionY(itemR, playerR)) {
                                 if (engine.haveIntersectionX(itemR, playerR)) {
                                     player.collisions.topBox = true;
+                                    player.gravity.jumpPower = -1;
+                                    if (item.attrs.name === 'mysterious' || item.attrs.name === 'mysteriousEmpty') {
+                                        layerHits.children.each(function (itemImageSearch) {
+                                            if (itemImageSearch.attrs.id === item.attrs.idImage)
+                                                itemImageSearch.image(engine.images['boxMysteriousEmpty']);
+                                        });
+                                        if (item.attrs.name === 'mysterious')
+                                            player.score += 100;
+                                        item.name('mysteriousEmpty');
+                                    }
                                 }
                             }
                         }
@@ -140,6 +149,7 @@ player = {
     status: 'idle',
     entity: null,
     entityImage: null,
+    score: 0,
     gravity: {
         jumpPower: 0,
         check: function () {

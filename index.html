@@ -33,7 +33,7 @@
             </div>
         </div>
         <div class="col-12">
-            <label>bottom box: </label><label id="lJumpPower"></label><br>
+            <label>Score: </label><label id="lScore"></label><br>
         </div>
     </div>
 </div>
@@ -44,6 +44,10 @@
     engine.ini();
     var sources = {
         box: 'box.png',
+        boxSmall: 'boxSmall.png',
+        boxBig: 'boxBig.png',
+        boxMysterious: 'boxMysterious.png',
+        boxMysteriousEmpty: 'boxMysteriousEmpty.png',
         playerLeft: 'playerLeft.png',
         playerRight: 'playerRight.png',
         playerJumpLeft: 'playerJumpLeft.png',
@@ -79,8 +83,8 @@
     //Подтянем для него текстуры
     player.entityImage = new Konva.Image({
         image: engine.images['playerLeft'],
-        x: player.x-5,
-        y: player.y-5,
+        x: player.x - 5,
+        y: player.y - 5,
         name: 'player',
         width: 35,
         height: 35
@@ -110,6 +114,6 @@
     }, 10);
 
     setInterval(function () {
-        $("#lJumpPower").html(player.collisions.bottomBox);
+        $("#lScore").html(player.score);
     }, 1);
 </script>
