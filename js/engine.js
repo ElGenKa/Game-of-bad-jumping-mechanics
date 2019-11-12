@@ -4,12 +4,14 @@ engine = {
     images: {},
     selectMap: null,
     npcI: 0,
+    mapMovedX: 0,
+    mapMovedY: 0,
     renderFrame: 0,
     npcs: [],
-    ini: function(){
+    ini: function () {
         engine.loadImages(sources);
         var selMap = localStorage.getItem('selectMap');
-        if(selMap){
+        if (selMap) {
             switch (selMap) {
                 case 'map01':
                     engine.selectMap = map01;
@@ -24,8 +26,7 @@ engine = {
                     engine.selectMap = map01;
                     break;
             }
-        }
-        else
+        } else
             engine.selectMap = map01;
 
         $('.mapSelector').on('click', function (item) {
@@ -40,16 +41,104 @@ engine = {
         player.keys.checkKeys();
         player.gravity.check();
 
-        if (this.renderFrame%2 !== 1) {
+        if (player.noDamageFrames > engine.renderFrame) {
+            if (this.renderFrame % 2 !== 1) {
+                player.entityImage.image(engine.images['playerDamage']);
+            }
+        }
+
+        if (this.renderFrame % 2 !== 1) {
             if (engine.npcs) {
                 engine.npcs.forEach(function (item) {
-                    item.upd();
+                    if (item.hp > 0)
+                        item.upd();
                 });
             }
         }
 
+        layerInterface.clear();
+        layerInterface.destroyChildren();
+        layerInterface.add(
+            new Konva.Image({
+                image: engine.images['bgInterface'],
+                width: 150,
+                height: 50,
+                x: 7,
+                y: 7
+            })
+        );
+        layerInterface.add(
+            new Konva.Text({
+                x: 15,
+                y: 15,
+                text: 'Lives: ',
+                fontSize: 14,
+                fontFamily: 'Calibri',
+                fill: 'red'
+            })
+        );
+        for (var iHp = 0; iHp < player.maxLives; iHp++) {
+            if (player.lives > iHp) {
+                layerInterface.add(
+                    new Konva.Image({
+                        image: engine.images['heart'],
+                        x: 50 + (iHp * 13),
+                        y: 15,
+                        name: 'heart',
+                        width: 10,
+                        height: 10
+                    })
+                );
+            } else {
+                layerInterface.add(
+                    new Konva.Image({
+                        image: engine.images['heartZero'],
+                        x: 50 + (iHp * 13),
+                        y: 15,
+                        name: 'heart',
+                        width: 10,
+                        height: 10
+                    })
+                );
+            }
+        }
+        layerInterface.add(
+            new Konva.Text({
+                x: 15,
+                y: 35,
+                text: 'Score: ' + player.score,
+                fontSize: 14,
+                fontFamily: 'Calibri',
+                fill: 'yellow'
+            })
+        );
+
+        this.renderFrame += 1;
+        if (player.lives <= 0) {
+            clearTimeout(gameTimer);
+            layerInterface.add(
+                new Konva.Text({
+                    x: 449,
+                    y: 249,
+                    text: 'GAME OVER',
+                    fontSize: 32,
+                    fontFamily: 'Calibri',
+                    fill: 'black'
+                })
+            );
+            layerInterface.add(
+                new Konva.Text({
+                    x: 450,
+                    y: 250,
+                    text: 'GAME OVER',
+                    fontSize: 32,
+                    fontFamily: 'Calibri',
+                    fill: 'red'
+                })
+            );
+        }
         layerHits.draw();
-        this.renderFrame +=1;
+        layerInterface.draw();
     },
 
     haveIntersectionX: function (r1, r2) {

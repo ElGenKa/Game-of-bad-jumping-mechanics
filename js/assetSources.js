@@ -1,8 +1,9 @@
 var sources = {
     heart: 'heart.png',
+    heartZero: 'heartZero.png',
+    bgInterface: 'bgInterface.png',
     snakeLeft: 'snakeLeft.png',
     snakeRight: 'snakeRight.png',
-    heartZero: 'heartZero.png',
     box: 'box.png',
     boxSmall: 'boxSmall.png',
     boxBig: 'boxBig.png',
@@ -11,5 +12,6 @@ var sources = {
     playerLeft: 'playerLeft.png',
     playerRight: 'playerRight.png',
     playerJumpLeft: 'playerJumpLeft.png',
-    playerJumpRight: 'playerJumpRight.png'
+    playerJumpRight: 'playerJumpRight.png',
+    playerDamage: 'playerDamage.png'
 };

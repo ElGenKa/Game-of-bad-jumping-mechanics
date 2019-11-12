@@ -8,9 +8,9 @@
     <script src="js/jquery-3.4.0.min.js"></script>
     <script src="js/bootstrap.min.js"></script>
     <script src="js/konva.min.js"></script>
-    <script src="js/player.js"></script>
     <script src="js/engine.js"></script>
     <script src="js/map.js"></script>
+    <script src="js/mapEditor.js"></script>
     <script src="maps/map01.js"></script>
     <script src="maps/map02.js"></script>
     <script src="maps/map03.js"></script>
@@ -24,13 +24,13 @@
             <a href="#" class="mapSelector" id="loadLvl1" data-map="map01">Уровень 1</a>
             <a href="#" class="mapSelector" id="loadLvl2" data-map="map02">Уровень 2</a>
             <a href="#" class="mapSelector" id="loadLvl3" data-map="map03">Уровень 3</a>
-            <a href="editor.html" data-map="map01">Редактор</a>
+            <a href="index.html" data-map="map01">Игра</a>
+            <button onclick="engine.download();">Сохранить</button>
         </div>
         <div class="col-12">
             <div class="card">
                 <div class="card-body">
                     <div id="game" class="w-100">
-
                     </div>
                 </div>
             </div>
@@ -42,7 +42,6 @@
 </body>
 </html>
 <script>
-    //Загрузим текстуры
     engine.ini();
 
     //создаём контейнер
@@ -54,51 +53,50 @@
 
     // далее создаём слой
     var layerHits = new Konva.Layer();
-    var layerInterface = new Konva.Layer();
 
     // далее инициализируем карту
     initMap(engine.selectMap);
 
     // зададим начальные координаты игрока (центр)
-    player.x = stage.width() / 2;
-    player.y = stage.height() / 2;
+    //player.x = stage.width() / 2;
+    //player.y = stage.height() / 2;
 
     // создадим фигуру игрока
-    player.entity = new Konva.Rect({
+    /*player.entity = new Konva.Rect({
         x: player.x,
         y: player.y,
         name: 'player',
         width: 25,
         height: 25
-    });
+    });*/
 
     //Подтянем для него текстуры
-    player.entityImage = new Konva.Image({
+    /*player.entityImage = new Konva.Image({
         image: engine.images['playerLeft'],
         x: player.x - 5,
         y: player.y - 5,
         name: 'player',
         width: 35,
         height: 35
-    });
+    });*/
 
     // добавляем игрока на слой
-    layerHits.add(player.entity);
-    layerHits.add(player.entityImage);
+    // layerHits.add(player.entity);
+    // layerHits.add(player.entityImage);
     //Добавляем текстуры
 
     // добавляем слои
     stage.add(layerHits);
-    stage.add(layerInterface);
+    //stage.add(layerInterface);
 
     //Отлавливаем нажатия клавишь
     $(document).keyup(function (item) {
         var keyPressed = item.which;
-        player.keys.kUp(keyPressed);
+        engine.keyUp(keyPressed);
     });
     $(document).keydown(function (item) {
         var keyPressed = item.which;
-        player.keys.kDown(keyPressed);
+        engine.keyDown(keyPressed);
     });
 
     //Запускаем цикл игры

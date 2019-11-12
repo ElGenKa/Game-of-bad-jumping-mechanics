@@ -123,7 +123,7 @@ player = {
                             if (engine.haveIntersectionY(itemR, playerR)) {
                                 if (engine.haveIntersectionX(itemR, playerR)) {
                                     if (engine.haveIntersection(itemR, playerR)) {
-                                        if (itemR.y < playerR.y + 24)
+                                        if (itemR.y < playerR.y + (playerR.height - 1))
                                             engine.cameraMoveY(-1);
                                     }
                                     player.collisions.bottomBox = true;
@@ -160,26 +160,38 @@ player = {
             );
         },
         checkNpc: function (npc, direction) {
-            if(npc.killer){
-                if(direction === 'left' || direction === 'right' || direction === 'bottom'){
-                    //player.lives -=1;
-                    if(direction === 'left') {
-                        player.gravity.gravityLeft = 6;
-                        player.gravity.jumpPower = 10;
-                        engine.cameraMoveY(-10);
-                        engine.cameraMoveX(10);
+            if (npc.killer) {
+                if (direction) {
+                    if (player.noDamageFrames < engine.renderFrame && direction !== 'bottom') {
+                        player.noDamageFrames = engine.renderFrame + 150;
+                        if (direction === 'left') {
+                            player.lives -= 1;
+                            player.gravity.gravityLeft = 6;
+                            player.gravity.jumpPower = 10;
+                            engine.cameraMoveY(-10);
+                            engine.cameraMoveX(10);
+                        }
+                        if (direction === 'right') {
+                            player.lives -= 1;
+                            player.gravity.gravityRight = 6;
+                            player.gravity.jumpPower = 10;
+                            engine.cameraMoveY(-10);
+                            engine.cameraMoveX(-10);
+                        }
+                        if (direction === 'top') {
+                            player.lives -= 5;
+                        }
                     }
-                    if(direction === 'right') {
-                        player.gravity.gravityRight = 15;
-                        player.gravity.jumpPower = 10;
+                    if (direction === 'bottom') {
                         engine.cameraMoveY(-10);
-                        engine.cameraMoveX(-10);
+                        player.gravity.jumpPower = 7;
+                        npc.hp -= 1;
+                        if (npc.hp <= 0) {
+                            player.score += npc.addScore;
+                            npc.entity.destroy();
+                            npc.entityImage.destroy();
+                        }
                     }
-                    if(direction === 'bottom'){
-                        engine.cameraMoveY(-10);
-                        player.gravity.jumpPower = 5;
-                    }
-
                 }
             }
         }
@@ -189,6 +201,8 @@ player = {
     entityImage: null,
     score: 0,
     lives: 3,
+    maxLives: 3,
+    noDamageFrames: 0,
     gravity: {
         gravityLeft: 0,
         gravityRight: 0,
@@ -205,17 +219,17 @@ player = {
             }
             engine.cameraMoveY((player.gravity.jumpPower * -1));
 
-            if(player.gravity.gravityLeft>0){
+            if (player.gravity.gravityLeft > 0) {
                 if (!player.collisions.rightBox) {
                     engine.cameraMoveX(player.gravity.gravityLeft);
                 }
-                player.gravity.gravityLeft -=0.25;
+                player.gravity.gravityLeft -= 0.25;
             }
-            if(player.gravity.gravityRight>0){
+            if (player.gravity.gravityRight > 0) {
                 if (!player.collisions.leftBox) {
                     engine.cameraMoveX(-player.gravity.gravityRight);
                 }
-                player.gravity.gravityRight -=0.25;
+                player.gravity.gravityRight -= 0.25;
             }
         }
     }
