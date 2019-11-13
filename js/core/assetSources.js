@@ -1,0 +1,33 @@
+var sources = {
+    //Скачанные текстуры
+    heart: 'download/HUD/hud_heartFull.png',
+    heartZero: 'download/HUD/hud_heartEmpty.png',
+    grass: 'download/Tiles/grass.png',
+    grassLeft: 'download/Tiles/grassLeft.png',
+    grassMid: 'download/Tiles/grassMid.png',
+    grassRight: 'download/Tiles/grassRight.png',
+    sandMid: 'download/Tiles/sand.png',
+    DecBush: 'download/Items/bush.png',
+    DecRock: 'download/Items/rock.png',
+    playerLeft: 'download/Player/playerLeft.png',
+    playerRight: 'download/Player/playerRight.png',
+    playerJumpLeft: 'download/Player/playerJumpLeft.png',
+    playerHurtLeft: 'download/Player/playerHurtLeft.png',
+    playerJumpRight: 'download/Player/playerJumpRight.png',
+    playerHurtRight: 'download/Player/playerHurtRight.png',
+    playerFront: 'download/Player/playerFront.png',
+    //Старые текстуры
+    bgInterface: 'bgInterface.png',
+    snakeLeft: 'snakeLeft.png',
+    snakeRight: 'snakeRight.png',
+    PlatformMedium: 'box.png',
+    PlatformSmall: 'boxSmall.png',
+    PlatformBig: 'boxBig.png',
+    boxMysterious: 'boxMysterious.png',
+    boxMysteriousEmpty: 'boxMysteriousEmpty.png',
+    old_playerLeft: 'playerLeft.png',
+    old_playerRight: 'playerRight.png',
+    old_playerJumpLeft: 'playerJumpLeft.png',
+    old_playerJumpRight: 'playerJumpRight.png',
+    playerDamage: 'playerDamage.png'
+};

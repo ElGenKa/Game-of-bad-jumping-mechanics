@@ -4,15 +4,15 @@
     <meta charset="UTF-8">
     <title>Simple Platformer</title>
     <link rel="stylesheet" href="css/game.css">
-    <script src="js/jquery-3.4.0.min.js"></script>
-    <script src="js/konva.min.js"></script>
+    <script src="js/framework/jquery-3.4.0.min.js"></script>
+    <script src="js/framework/konva.min.js"></script>
     <script src="js/entities/core.js"></script>
-    <script src="js/player.js"></script>
-    <script src="js/engine.js"></script>
-    <script src="js/map.js"></script>
+    <!--<script src="js/entities/player.js"></script>
+    <script src="js/entities/Npc.js"></script>-->
+    <script src="js/core/engine.js"></script>
+    <script src="js/core/map.js"></script>
     <script src="maps/maps.js"></script>
-    <script src="js/npc.js"></script>
-    <script src="js/assetSources.js"></script>
+    <script src="js/core/assetSources.js"></script>
 </head>
 <body>
 <div class="container">
@@ -67,26 +67,26 @@
     player.y = stage.height() / 2;
 
     // создадим фигуру игрока
-    player.entity = new Konva.Rect({
+    /*player.entity = new Konva.Rect({
         x: player.x,
         y: player.y,
         name: 'player',
         width: 25,
         height: 25
-    });
+    });*/
 
     //Подтянем для него текстуры
     player.entityImage = new Konva.Image({
         image: engine.images['playerLeft'],
-        x: player.x - 5,
-        y: player.y - 5,
+        x: player.x,
+        y: player.y,
         name: 'player',
-        width: 35,
-        height: 35
+        width: 66,
+        height: 92
     });
 
     // добавляем игрока на слой
-    layerHits.add(player.entity);
+    //layerHits.add(player.entity);
     layerHits.add(player.entityImage);
 
     // добавляем слои

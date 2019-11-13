@@ -4,15 +4,14 @@
     <meta charset="UTF-8">
     <title>Simple Platformer Editor</title>
     <link rel="stylesheet" href="css/game.css">
-    <script src="js/jquery-3.4.0.min.js"></script>
-    <script src="js/konva.min.js"></script>
+    <script src="js/framework/jquery-3.4.0.min.js"></script>
+    <script src="js/framework/konva.min.js"></script>
     <script src="js/entities/core.js"></script>
-    <script src="js/engine.js"></script>
-    <script src="js/map.js"></script>
-    <script src="js/mapEditor.js"></script>
+    <script src="js/core/engine.js"></script>
+    <script src="js/core/map.js"></script>
+    <script src="js/core/mapEditor.js"></script>
     <script src="maps/maps.js"></script>
-    <script src="js/npc.js"></script>
-    <script src="js/assetSources.js"></script>
+    <script src="js/core/assetSources.js"></script>
 </head>
 <body>
 <div class="container">
@@ -69,21 +68,18 @@
     layerHits.on('mouseover', function(evt) { //Наведение мышки
         var shape = evt.target;
         document.body.style.cursor = 'pointer';
-        shape.strokeEnabled(true);
+        //shape.strokeEnabled(true);
         layerHits.draw();
     });
     layerHits.on('mouseout', function(evt) { //Отвод мышки
         var shape = evt.target;
         document.body.style.cursor = 'default';
-        shape.strokeEnabled(false);
+        //shape.strokeEnabled(false);
         layerHits.draw();
     });
     layerHits.on('click', function(evt) { //Клик мышки
-        //console.log(evt);
-        if(engine.selected)
-            engine.selected.strokeEnabled(false);
-        engine.selected = evt.target;
-        $('#object_t').val(evt.target.attrs.t)
+        engine.selected = evt.target.attrs.parent;
+        $('#object_t').val(evt.target.attrs.parent.attrs.t)
     });
 
     //Отлавливаем нажатия клавишь

@@ -13,19 +13,37 @@ class BoxCore {
         var drag = false;
         if (engine.editor === 1)
             drag = true;
-        var entity =  new Konva.Image({
-            image: this.image,
+        var group = new Konva.Group({
             x: this.x,
             y: this.y,
             draggable: drag,
-            width: this.w,
-            height: this.h,
-            t: this.name,
-            name: 'box',
-            stroke: 'red',
-            strokeWidth: 3
+            t: this.name
         });
-        entity.strokeEnabled(false);
-        return entity;
+        var entity;
+        if(this.image.count === 1) {
+            entity = new Konva.Image({
+                image: this.image.image,
+                x: 0,
+                y: 0,
+                width: this.w,
+                height: this.h,
+                parent: group
+            });
+            group.add(entity);
+        }else{
+            for(var i = 0; i<this.image.count; i++){
+                entity = new Konva.Image({
+                    image: this.image.image[i],
+                    x: 70*i,
+                    y: 0,
+                    width: this.w / this.image.count,
+                    height: this.h,
+                    parent: group
+                });
+                group.add(entity);
+            }
+        }
+        //group.strokeEnabled(false);
+        return group;
     }
 }

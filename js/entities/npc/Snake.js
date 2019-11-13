@@ -1,5 +1,5 @@
 class Snake extends NpcCore{
-    constructor(){
-        super();
+    constructor(x,y){
+        super(x,y,'snake');
     }
 }

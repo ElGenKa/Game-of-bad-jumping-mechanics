@@ -1,5 +1,18 @@
-class PlatformBig extends BoxCore{
-    constructor(x,y){
-        return super(x,y,210,40,engine.images['PlatformBig'],'PlatformBig');
+class PlatformBig extends BoxCore {
+    constructor(x, y) {
+        return super(
+            x,
+            y,
+            210,
+            70,
+            {
+                count: 3,
+                image: [
+                    engine.images['grassLeft'],
+                    engine.images['grassMid'],
+                    engine.images['grassRight']
+                ]
+            },
+            'PlatformBig');
     }
 }
