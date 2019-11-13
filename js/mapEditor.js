@@ -18,24 +18,9 @@ engine = {
         engine.loadImages(sources);
         var selMap = localStorage.getItem('selectMap');
         if (selMap) {
-            switch (selMap) {
-                case 'map01':
-                    //engine.selectMap = JSON.parse(map01);
-                    //console.log(engine.selectMap);
-                    engine.selectMap = map01;
-                    break;
-                case 'map02':
-                    engine.selectMap = map02;
-                    break;
-                case 'map03':
-                    engine.selectMap = map03;
-                    break;
-                default:
-                    engine.selectMap = map01;
-                    break;
-            }
+            engine.selectMap = selMap;
         } else
-            engine.selectMap = map01;
+            engine.selectMap = 0;
 
         $('.mapSelector').on('click', function (item) {
             localStorage.setItem('selectMap', $(item.currentTarget).data('map'));
@@ -45,6 +30,8 @@ engine = {
 
     render: function () {
         layerHits.clear();
+        if(this.selected)
+            this.selected.strokeEnabled(true);
         if (this.keys.a) {
             this.cameraMoveX(-2);
             this.mapMovedX -= 2;
@@ -74,8 +61,8 @@ engine = {
     },
 
     moveAllEntities: function (x = 0, y = 0) {
-        engine.mapMovedX += x;
-        engine.mapMovedY += y;
+        engine.mapMovedX -= x;
+        engine.mapMovedY -= y;
         layerHits.children.each(function (item) {
             if (item.attrs.name !== 'player') {
                 if (x) {
@@ -135,13 +122,30 @@ engine = {
     },
 
     download: function () {
-        var content = JSON.stringify(layerHits.children);
-        var fileName = 'map01.js';
+        var res = layerHits.children;
+        var contentTemp = [];
+        res.forEach(function (item) {
+            contentTemp.push({x: item.attrs.x, y: item.attrs.y, t: item.attrs.t, tNpc: item.attrs.tNpc});
+        });
+        var content = JSON.stringify(contentTemp);
+        var fileName = 'map.txt';
         var a = document.createElement("a");
         var file = new Blob([content], {type: 'text/plain'});
         a.href = URL.createObjectURL(file);
         a.download = fileName;
         a.click();
+    },
+
+    newPlatform: function () {
+        layerHits.add(new PlatformMedium(300,300));
+    },
+
+    selected: null,
+
+    acceptBlock(){
+        engine.selected.destroy();
+        var entity = eval("new " + $('#object_t').val() + "("+engine.selected.x()+","+engine.selected.y()+")");
+        layerHits.add(entity);
     }
 
 };

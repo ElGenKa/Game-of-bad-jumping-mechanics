@@ -12,22 +12,9 @@ engine = {
         engine.loadImages(sources);
         var selMap = localStorage.getItem('selectMap');
         if (selMap) {
-            switch (selMap) {
-                case 'map01':
-                    engine.selectMap = map01;
-                    break;
-                case 'map02':
-                    engine.selectMap = map02;
-                    break;
-                case 'map03':
-                    engine.selectMap = map03;
-                    break;
-                default:
-                    engine.selectMap = map01;
-                    break;
-            }
+            engine.selectMap = selMap;
         } else
-            engine.selectMap = map01;
+            engine.selectMap = 0;
 
         $('.mapSelector').on('click', function (item) {
             localStorage.setItem('selectMap', $(item.currentTarget).data('map'));

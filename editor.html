@@ -4,16 +4,13 @@
     <meta charset="UTF-8">
     <title>Game of bad jumping mechanics</title>
     <link rel="stylesheet" href="css/game.css">
-    <link rel="stylesheet" href="css/bootstrap.min.css">
     <script src="js/jquery-3.4.0.min.js"></script>
-    <script src="js/bootstrap.min.js"></script>
     <script src="js/konva.min.js"></script>
+    <script src="js/entities/core.js"></script>
     <script src="js/engine.js"></script>
     <script src="js/map.js"></script>
     <script src="js/mapEditor.js"></script>
-    <script src="maps/map01.js"></script>
-    <script src="maps/map02.js"></script>
-    <script src="maps/map03.js"></script>
+    <script src="maps/maps.js"></script>
     <script src="js/npc.js"></script>
     <script src="js/assetSources.js"></script>
 </head>
@@ -21,11 +18,14 @@
 <div class="container">
     <div class="row">
         <div class="col-12 mb-2">
-            <a href="#" class="mapSelector" id="loadLvl1" data-map="map01">Уровень 1</a>
-            <a href="#" class="mapSelector" id="loadLvl2" data-map="map02">Уровень 2</a>
-            <a href="#" class="mapSelector" id="loadLvl3" data-map="map03">Уровень 3</a>
+            <a href="#" class="mapSelector" id="loadLvl1" data-map="0">Уровень 1</a>
+            <a href="#" class="mapSelector" id="loadLvl2" data-map="1">Уровень 2</a>
+            <a href="#" class="mapSelector" id="loadLvl3" data-map="2">Уровень 3</a>
             <a href="index.html" data-map="map01">Игра</a>
             <button onclick="engine.download();">Сохранить</button>
+        </div>
+        <div class="col-12">
+            <button onclick="engine.newPlatform();">Добавить платформу</button>
         </div>
         <div class="col-12">
             <div class="card">
@@ -36,6 +36,10 @@
             </div>
         </div>
         <div class="col-12">
+            <h4>Параметры объекта</h4>
+            type: <input id="object_t"><br>
+            NpcType: <input id="object_tNpc">(Для NPC)<br>
+            <button onclick="engine.acceptBlock()">Применить</button>
         </div>
     </div>
 </div>
@@ -47,8 +51,8 @@
     //создаём контейнер
     var stage = new Konva.Stage({
         container: 'game',  // индификатор div контейнера
-        width: 1070,
-        height: 500
+        width: 1128,
+        height: 620
     });
 
     // далее создаём слой
@@ -87,6 +91,28 @@
 
     // добавляем слои
     stage.add(layerHits);
+
+    layerHits.on('mouseover', function(evt) {
+        //console.log(evt);
+        var shape = evt.target;
+        document.body.style.cursor = 'pointer';
+        shape.strokeEnabled(true);
+        layerHits.draw();
+    });
+    layerHits.on('mouseout', function(evt) {
+        var shape = evt.target;
+        document.body.style.cursor = 'default';
+        shape.strokeEnabled(false);
+        layerHits.draw();
+    });
+    layerHits.on('click', function(evt) {
+        //console.log(evt);
+        if(engine.selected)
+            engine.selected.strokeEnabled(false);
+        engine.selected = evt.target;
+        $('#object_t').val(evt.target.attrs.t)
+    });
+
     //stage.add(layerInterface);
 
     //Отлавливаем нажатия клавишь
