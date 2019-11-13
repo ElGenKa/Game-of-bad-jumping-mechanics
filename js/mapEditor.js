@@ -4,8 +4,6 @@ engine = {
     images: {},
     selectMap: null,
     renderFrame: 0,
-    mapMovedX: 0,
-    mapMovedY: 0,
     editor: 1,
     npcs: [],
     keys: {
@@ -34,19 +32,15 @@ engine = {
             this.selected.strokeEnabled(true);
         if (this.keys.a) {
             this.cameraMoveX(-2);
-            this.mapMovedX -= 2;
         }
         if (this.keys.s) {
             this.cameraMoveY(2);
-            this.mapMovedY += 2;
         }
         if (this.keys.d) {
             this.cameraMoveX(2);
-            this.mapMovedX += 2;
         }
         if (this.keys.w) {
             this.cameraMoveY(-2);
-            this.mapMovedY -= 2;
         }
         this.renderFrame += 1;
         layerHits.draw();
@@ -61,8 +55,6 @@ engine = {
     },
 
     moveAllEntities: function (x = 0, y = 0) {
-        engine.mapMovedX -= x;
-        engine.mapMovedY -= y;
         layerHits.children.each(function (item) {
             if (item.attrs.name !== 'player') {
                 if (x) {
@@ -141,7 +133,6 @@ engine = {
     },
 
     selected: null,
-
     acceptBlock(){
         engine.selected.destroy();
         var entity = eval("new " + $('#object_t').val() + "("+engine.selected.x()+","+engine.selected.y()+")");

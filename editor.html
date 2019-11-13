@@ -46,6 +46,7 @@
 </body>
 </html>
 <script>
+    // Инициализируем ядро
     engine.ini();
 
     //создаём контейнер
@@ -61,59 +62,29 @@
     // далее инициализируем карту
     initMap(engine.selectMap);
 
-    // зададим начальные координаты игрока (центр)
-    //player.x = stage.width() / 2;
-    //player.y = stage.height() / 2;
-
-    // создадим фигуру игрока
-    /*player.entity = new Konva.Rect({
-        x: player.x,
-        y: player.y,
-        name: 'player',
-        width: 25,
-        height: 25
-    });*/
-
-    //Подтянем для него текстуры
-    /*player.entityImage = new Konva.Image({
-        image: engine.images['playerLeft'],
-        x: player.x - 5,
-        y: player.y - 5,
-        name: 'player',
-        width: 35,
-        height: 35
-    });*/
-
-    // добавляем игрока на слой
-    // layerHits.add(player.entity);
-    // layerHits.add(player.entityImage);
-    //Добавляем текстуры
-
     // добавляем слои
     stage.add(layerHits);
 
-    layerHits.on('mouseover', function(evt) {
-        //console.log(evt);
+    //События блоков
+    layerHits.on('mouseover', function(evt) { //Наведение мышки
         var shape = evt.target;
         document.body.style.cursor = 'pointer';
         shape.strokeEnabled(true);
         layerHits.draw();
     });
-    layerHits.on('mouseout', function(evt) {
+    layerHits.on('mouseout', function(evt) { //Отвод мышки
         var shape = evt.target;
         document.body.style.cursor = 'default';
         shape.strokeEnabled(false);
         layerHits.draw();
     });
-    layerHits.on('click', function(evt) {
+    layerHits.on('click', function(evt) { //Клик мышки
         //console.log(evt);
         if(engine.selected)
             engine.selected.strokeEnabled(false);
         engine.selected = evt.target;
         $('#object_t').val(evt.target.attrs.t)
     });
-
-    //stage.add(layerInterface);
 
     //Отлавливаем нажатия клавишь
     $(document).keyup(function (item) {
