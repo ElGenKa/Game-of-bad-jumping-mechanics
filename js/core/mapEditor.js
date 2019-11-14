@@ -74,8 +74,19 @@ engine = {
         var assetDir = 'assets/';
         engine.images = {};
         for (var src in sources) {
-            engine.images[src] = new Image();
-            engine.images[src].src = assetDir + sources[src];
+            console.log(sources[src].count);
+            if (sources[src].count > 0) {
+                engine.images[src] = {count: sources[src].count};
+                for(var i = 0; i<sources.count; i++){
+                    console.log(sources);
+                    engine.images[src].image[i] = new Image();
+                    engine.images[src].image[i].src = assetDir + sources[src].image[i];
+                }
+            } else {
+                //console.log(sources[src]);
+                engine.images[src] = new Image();
+                engine.images[src].src = assetDir + sources[src];
+            }
         }
     },
 

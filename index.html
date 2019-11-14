@@ -62,31 +62,6 @@
     // далее инициализируем карту
     initMap(engine.selectMap);
 
-    // зададим начальные координаты игрока (центр)
-    player.x = stage.width() / 2;
-    player.y = stage.height() / 2;
-
-    // создадим фигуру игрока
-    /*player.entity = new Konva.Rect({
-        x: player.x,
-        y: player.y,
-        name: 'player',
-        width: 25,
-        height: 25
-    });*/
-
-    //Подтянем для него текстуры
-    player.entityImage = new Konva.Image({
-        image: engine.images['playerLeft'],
-        x: player.x,
-        y: player.y,
-        name: 'player',
-        width: 66,
-        height: 92
-    });
-
-    // добавляем игрока на слой
-    //layerHits.add(player.entity);
     layerHits.add(player.entityImage);
 
     // добавляем слои

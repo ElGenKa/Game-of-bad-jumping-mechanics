@@ -1,6 +1,7 @@
 var player;
-class Player{
-    constructor(){
+
+class Player {
+    constructor() {
         this.x = 0;
         this.y = 0;
         this.status = 'idle';
@@ -10,6 +11,7 @@ class Player{
         this.maxLives = 3;
         this.score = 0;
         this.noDamageFrames = 0;
+        this.animator = null;
         this.keys = {
             a: false,
             d: false,
@@ -61,12 +63,14 @@ class Player{
                         engine.cameraMoveX(-3);
                     }
                     if (player.status === 'jumped') {
-                        if(player.gravity.jumpPower > 0)
+                        player.animator.stop();
+                        if (player.gravity.jumpPower > 0)
                             player.entityImage.image(engine.images['playerJumpLeft']);
                         else
                             player.entityImage.image(engine.images['playerHurtLeft']);
                     } else {
-                        player.entityImage.image(engine.images['playerLeft'])
+                        player.animator.start(engine.images['playerAnimateLeft'], 50);
+                        //player.entityImage.image(engine.images['playerLeft'])
                     }
                 }
                 if (player.keys.d) {
@@ -74,12 +78,14 @@ class Player{
                         engine.cameraMoveX(3);
                     }
                     if (player.status === 'jumped') {
-                        if(player.gravity.jumpPower > 0)
+                        player.animator.stop();
+                        if (player.gravity.jumpPower > 0)
                             player.entityImage.image(engine.images['playerJumpRight']);
                         else
                             player.entityImage.image(engine.images['playerHurtRight']);
                     } else {
-                        player.entityImage.image(engine.images['playerRight'])
+                        player.animator.start(engine.images['playerAnimateRight'], 50);
+                        //player.entityImage.image(engine.images['playerRight'])
                     }
                 }
                 if (player.keys.s) {
@@ -92,6 +98,7 @@ class Player{
                     }
                 }
                 if (!player.keys.a && !player.keys.d) {
+                    player.animator.stop();
                     player.entityImage.image(engine.images['playerFront'])
                 }
             }
@@ -110,19 +117,20 @@ class Player{
                             if (itemR.x < playerR.x) {
                                 if (engine.haveIntersectionY(itemR, playerR)) {
                                     if (engine.haveIntersectionX(itemR, playerR)) {
-                                        if (playerR.y > itemR.y) {
+                                        //console.log(playerR.y - playerR.height / 2 +" "+ itemR.y)
+                                        if (playerR.y + playerR.height - 5 < itemR.y) {
                                             player.collisions.leftBox = true;
                                             if (item.attrs.name === 'npc') {
                                                 player.collisions.checkNpc(engine.npcs[item.attrs.npcID], 'left');
                                             }
                                         }
                                     }
-                                }
+                                  }
                             }
                             if (itemR.x > playerR.x) {
                                 if (engine.haveIntersectionY(itemR, playerR)) {
                                     if (engine.haveIntersectionX(itemR, playerR)) {
-                                        if (playerR.y > itemR.y) {
+                                        if (playerR.y - playerR.height / 2 > itemR.y) {
                                             player.collisions.rightBox = true;
                                             if (item.attrs.name === 'npc') {
                                                 player.collisions.checkNpc(engine.npcs[item.attrs.npcID], 'right');
@@ -135,8 +143,13 @@ class Player{
                                 if (engine.haveIntersectionY(itemR, playerR)) {
                                     if (engine.haveIntersectionX(itemR, playerR)) {
                                         if (engine.haveIntersection(itemR, playerR)) {
-                                            if (itemR.y < playerR.y + (playerR.height - 1))
-                                                engine.cameraMoveY(-1);
+                                            //console.log(player.collisions.leftBox);
+                                            if (itemR.y < playerR.y + (playerR.height - 1)) {
+                                                if (itemR.y < playerR.y + (playerR.height - 1))
+                                                    engine.cameraMoveY(-1);
+                                            } else {
+
+                                            }
                                         }
                                         player.collisions.bottomBox = true;
                                         player.status = 'idle';
@@ -240,5 +253,15 @@ class Player{
         };
     }
 }
+
 //Объект игрока с его поведением
 player = new Player();
+player.entityImage = new Konva.Image({
+    image: engine.images['playerLeft'],
+    x: 600,
+    y: 200,
+    name: 'player',
+    width: 66,
+    height: 92
+});
+player.animator = new Animation(player.entityImage);

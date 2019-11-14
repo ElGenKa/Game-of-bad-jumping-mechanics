@@ -2,6 +2,7 @@
 class Core {
     constructor() {
         //Игрок
+        this.include('js/core/animation.js');
         this.include('js/entities/player.js');
         //Игрок
         this.include('js/entities/Npc.js');
