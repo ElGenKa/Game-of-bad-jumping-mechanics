@@ -1,6 +1,6 @@
-var player;
+//var player;
 
-class Player {
+class PlayerOld {
     constructor() {
         this.x = 0;
         this.y = 0;
@@ -64,9 +64,9 @@ class Player {
                     }
                     if (player.status === 'jumped') {
                         player.animator.stop();
-                        if (player.gravity.jumpPower > 0)
+                        /*if (player.gravity.jumpPower > 0)
                             player.entityImage.image(engine.images['playerJumpLeft']);
-                        else
+                        else*/
                             player.entityImage.image(engine.images['playerHurtLeft']);
                     } else {
                         player.animator.start(engine.images['playerAnimateLeft'], 50);
@@ -79,9 +79,9 @@ class Player {
                     }
                     if (player.status === 'jumped') {
                         player.animator.stop();
-                        if (player.gravity.jumpPower > 0)
+                        /*if (player.gravity.jumpPower > 0)
                             player.entityImage.image(engine.images['playerJumpRight']);
-                        else
+                        else*/
                             player.entityImage.image(engine.images['playerHurtRight']);
                     } else {
                         player.animator.start(engine.images['playerAnimateRight'], 50);
@@ -93,7 +93,7 @@ class Player {
                         if (!player.collisions.topBox) {
                             engine.cameraMoveY(-10);
                             player.status = 'jumped';
-                            player.gravity.jumpPower = 10;
+                            //player.gravity.jumpPower = 10;
                         }
                     }
                 }
@@ -117,8 +117,7 @@ class Player {
                             if (itemR.x < playerR.x) {
                                 if (engine.haveIntersectionY(itemR, playerR)) {
                                     if (engine.haveIntersectionX(itemR, playerR)) {
-                                        //console.log(playerR.y - playerR.height / 2 +" "+ itemR.y)
-                                        if (playerR.y + playerR.height - 5 < itemR.y) {
+                                        if (playerR.y > itemR.y) {
                                             player.collisions.leftBox = true;
                                             if (item.attrs.name === 'npc') {
                                                 player.collisions.checkNpc(engine.npcs[item.attrs.npcID], 'left');
@@ -130,7 +129,7 @@ class Player {
                             if (itemR.x > playerR.x) {
                                 if (engine.haveIntersectionY(itemR, playerR)) {
                                     if (engine.haveIntersectionX(itemR, playerR)) {
-                                        if (playerR.y - playerR.height / 2 > itemR.y) {
+                                        if (playerR.y > itemR.y) {
                                             player.collisions.rightBox = true;
                                             if (item.attrs.name === 'npc') {
                                                 player.collisions.checkNpc(engine.npcs[item.attrs.npcID], 'right');
@@ -153,7 +152,6 @@ class Player {
                                         }
                                         player.collisions.bottomBox = true;
                                         player.status = 'idle';
-                                        player.gravity.jumpPower = 0;
                                         if (item.attrs.name === 'npc') {
                                             player.collisions.checkNpc(engine.npcs[item.attrs.npcID], 'bottom');
                                         }
@@ -164,7 +162,6 @@ class Player {
                                 if (engine.haveIntersectionY(itemR, playerR)) {
                                     if (engine.haveIntersectionX(itemR, playerR)) {
                                         player.collisions.topBox = true;
-                                        player.gravity.jumpPower = -1;
                                         if (item.attrs.name === 'mysterious' || item.attrs.name === 'mysteriousEmpty') {
                                             layerHits.children.each(function (itemImageSearch) {
                                                 if (itemImageSearch.attrs.id === item.attrs.idImage)
@@ -192,14 +189,12 @@ class Player {
                             if (direction === 'left') {
                                 player.lives -= 1;
                                 player.gravity.gravityLeft = 6;
-                                player.gravity.jumpPower = 10;
                                 engine.cameraMoveY(-10);
                                 engine.cameraMoveX(10);
                             }
                             if (direction === 'right') {
                                 player.lives -= 1;
                                 player.gravity.gravityRight = 6;
-                                player.gravity.jumpPower = 10;
                                 engine.cameraMoveY(-10);
                                 engine.cameraMoveX(-10);
                             }
@@ -209,7 +204,6 @@ class Player {
                         }
                         if (direction === 'bottom') {
                             engine.cameraMoveY(-10);
-                            player.gravity.jumpPower = 7;
                             npc.hp -= 1;
                             if (npc.hp <= 0) {
                                 player.score += npc.addScore;
@@ -226,10 +220,10 @@ class Player {
             gravityRight: 0,
             jumpPower: 0,
             check: function () {
-                if (!player.collisions.bottomBox) {
+                /*if (!player.collisions.bottomBox) {
                     if (player.keys.s)
                         player.gravity.jumpPower -= 0.25;
-                    else
+                    else a
                         player.gravity.jumpPower -= 0.50;
                 } else {
                     player.gravity.jumpPower = 0;
@@ -248,13 +242,14 @@ class Player {
                         engine.cameraMoveX(-player.gravity.gravityRight);
                     }
                     player.gravity.gravityRight -= 0.25;
-                }
+                }*/
             }
         };
     }
 }
 
 //Объект игрока с его поведением
+/*
 player = new Player();
 player.entityImage = new Konva.Image({
     image: engine.images['playerLeft'],
@@ -264,4 +259,4 @@ player.entityImage = new Konva.Image({
     width: 66,
     height: 92
 });
-player.animator = new Animation(player.entityImage);
+player.animator = new Animation(player.entityImage);*/

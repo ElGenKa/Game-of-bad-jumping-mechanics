@@ -45,7 +45,7 @@
 </body>
 </html>
 <script>
-    // Инициализируем ядро
+    // Инициализируем двигло
     engine.ini();
 
     //создаём контейнер
@@ -58,24 +58,31 @@
     // далее создаём слой
     var layerHits = new Konva.Layer();
     var layerInterface = new Konva.Layer();
+    var layerFon = new Konva.Layer();
 
     // далее инициализируем карту
     initMap(engine.selectMap);
 
-    layerHits.add(player.entityImage);
+    layerHits.add(player.entity);
+    layerInterface.add(player.hpBar.down);
+    layerInterface.add(player.entityHitBox);
+    layerInterface.add(player.entityHitBullets);
+
+    //var interface = new Interface();
 
     // добавляем слои
+    stage.add(layerFon);
     stage.add(layerHits);
     stage.add(layerInterface);
 
     //Отлавливаем нажатия клавишь
     $(document).keyup(function (item) {
         var keyPressed = item.which;
-        player.keys.kUp(keyPressed);
+        player.keyHandler(keyPressed, 'up');
     });
     $(document).keydown(function (item) {
         var keyPressed = item.which;
-        player.keys.kDown(keyPressed);
+        player.keyHandler(keyPressed, 'down');
     });
 
     //Запускаем цикл игры

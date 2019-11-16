@@ -2,9 +2,12 @@
 class Core {
     constructor() {
         //Игрок
-        this.include('js/core/animation.js');
-        this.include('js/entities/player.js');
-        //Игрок
+        this.include('js/core/EntityAnimation.js');
+        this.include('js/core/Inventory.js');
+        this.include('js/core/Weapon.js');
+        this.include('js/core/Interface.js');
+        this.include('js/entities/playerAlt.js');
+        //npc
         this.include('js/entities/Npc.js');
 
         //Декорации

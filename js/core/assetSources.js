@@ -1,12 +1,13 @@
 var sources = {
     //Скачанные текстуры
+    hpBarDown: 'hpBarDown.png',
     heart: 'download/HUD/hud_heartFull.png',
     heartZero: 'download/HUD/hud_heartEmpty.png',
-    grass: 'download/Tiles/grass.png',
-    grassLeft: 'download/Tiles/grassLeft.png',
-    grassMid: 'download/Tiles/grassMid.png',
-    grassRight: 'download/Tiles/grassRight.png',
-    sandMid: 'download/Tiles/sand.png',
+    grass: 'download/Tiles/castleCenter.png',
+    grassLeft: 'download/Tiles/castleCenter.png',
+    grassMid: 'download/Tiles/castleCenter.png',
+    grassRight: 'download/Tiles/castleCenter.png',
+    sandMid: 'download/Tiles/castleCenter.png',
     DecBush: 'download/Items/bush.png',
     DecRock: 'download/Items/rock.png',
     playerLeft: 'download/Player/playerLeft.png',
@@ -32,6 +33,102 @@ var sources = {
         ]
     },
     playerAnimateRight: {
+        count: 10,
+        image: [
+            'download/Player/p1_walk/PNG/p1_walk01.png',
+            'download/Player/p1_walk/PNG/p1_walk02.png',
+            'download/Player/p1_walk/PNG/p1_walk03.png',
+            'download/Player/p1_walk/PNG/p1_walk04.png',
+            'download/Player/p1_walk/PNG/p1_walk05.png',
+            'download/Player/p1_walk/PNG/p1_walk06.png',
+            'download/Player/p1_walk/PNG/p1_walk07.png',
+            'download/Player/p1_walk/PNG/p1_walk08.png',
+            'download/Player/p1_walk/PNG/p1_walk09.png',
+            'download/Player/p1_walk/PNG/p1_walk10.png',
+            'download/Player/p1_walk/PNG/p1_walk11.png'
+        ]
+    },
+    playerAnimateTop: {
+        count: 10,
+        image: [
+            'download/Player/p1_walk/PNG/p1_walk01.png',
+            'download/Player/p1_walk/PNG/p1_walk02.png',
+            'download/Player/p1_walk/PNG/p1_walk03.png',
+            'download/Player/p1_walk/PNG/p1_walk04.png',
+            'download/Player/p1_walk/PNG/p1_walk05.png',
+            'download/Player/p1_walk/PNG/p1_walk06.png',
+            'download/Player/p1_walk/PNG/p1_walk07.png',
+            'download/Player/p1_walk/PNG/p1_walk08.png',
+            'download/Player/p1_walk/PNG/p1_walk09.png',
+            'download/Player/p1_walk/PNG/p1_walk10.png',
+            'download/Player/p1_walk/PNG/p1_walk11.png'
+        ]
+    },
+    playerAnimateDown: {
+        count: 10,
+        image: [
+            'download/Player/p1_walk/PNG/p1_walk01.png',
+            'download/Player/p1_walk/PNG/p1_walk02.png',
+            'download/Player/p1_walk/PNG/p1_walk03.png',
+            'download/Player/p1_walk/PNG/p1_walk04.png',
+            'download/Player/p1_walk/PNG/p1_walk05.png',
+            'download/Player/p1_walk/PNG/p1_walk06.png',
+            'download/Player/p1_walk/PNG/p1_walk07.png',
+            'download/Player/p1_walk/PNG/p1_walk08.png',
+            'download/Player/p1_walk/PNG/p1_walk09.png',
+            'download/Player/p1_walk/PNG/p1_walk10.png',
+            'download/Player/p1_walk/PNG/p1_walk11.png'
+        ]
+    },
+    playerAnimateLeftTop: {
+        count: 10,
+        image: [
+            'download/Player/p1_walk/PNG/p1_walk01.png',
+            'download/Player/p1_walk/PNG/p1_walk02.png',
+            'download/Player/p1_walk/PNG/p1_walk03.png',
+            'download/Player/p1_walk/PNG/p1_walk04.png',
+            'download/Player/p1_walk/PNG/p1_walk05.png',
+            'download/Player/p1_walk/PNG/p1_walk06.png',
+            'download/Player/p1_walk/PNG/p1_walk07.png',
+            'download/Player/p1_walk/PNG/p1_walk08.png',
+            'download/Player/p1_walk/PNG/p1_walk09.png',
+            'download/Player/p1_walk/PNG/p1_walk10.png',
+            'download/Player/p1_walk/PNG/p1_walk11.png'
+        ]
+    },
+    playerAnimateLeftDown: {
+        count: 10,
+        image: [
+            'download/Player/p1_walk/PNG/p1_walk01.png',
+            'download/Player/p1_walk/PNG/p1_walk02.png',
+            'download/Player/p1_walk/PNG/p1_walk03.png',
+            'download/Player/p1_walk/PNG/p1_walk04.png',
+            'download/Player/p1_walk/PNG/p1_walk05.png',
+            'download/Player/p1_walk/PNG/p1_walk06.png',
+            'download/Player/p1_walk/PNG/p1_walk07.png',
+            'download/Player/p1_walk/PNG/p1_walk08.png',
+            'download/Player/p1_walk/PNG/p1_walk09.png',
+            'download/Player/p1_walk/PNG/p1_walk10.png',
+            'download/Player/p1_walk/PNG/p1_walk11.png'
+        ]
+    },
+    playerAnimateRightDown: {
+        count: 10,
+        image: [
+            'download/Player/p1_walk/PNG/p1_walk01.png',
+            'download/Player/p1_walk/PNG/p1_walk02.png',
+            'download/Player/p1_walk/PNG/p1_walk03.png',
+            'download/Player/p1_walk/PNG/p1_walk04.png',
+            'download/Player/p1_walk/PNG/p1_walk05.png',
+            'download/Player/p1_walk/PNG/p1_walk06.png',
+            'download/Player/p1_walk/PNG/p1_walk07.png',
+            'download/Player/p1_walk/PNG/p1_walk08.png',
+            'download/Player/p1_walk/PNG/p1_walk09.png',
+            'download/Player/p1_walk/PNG/p1_walk10.png',
+            'download/Player/p1_walk/PNG/p1_walk11.png'
+        ]
+    },
+    playerAnimateRightTop: {
         count: 10,
         image: [
             'download/Player/p1_walk/PNG/p1_walk01.png',

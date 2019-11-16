@@ -1,4 +1,4 @@
-class Animation {
+class EntityAnimation {
     constructor(entity) {
         this.entity = entity;
         this.frame = 0;
@@ -22,7 +22,7 @@ class Animation {
     start(asset,speed = 50) {
         //console.log(speed);
         if(this.asset !== asset) {
-            console.log(asset);
+            //console.log(asset);
             this.stoped = false;
             this.frame = 0;
             this.countFrame = asset.count;

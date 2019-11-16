@@ -56,7 +56,7 @@ engine = {
 
     moveAllEntities: function (x = 0, y = 0) {
         layerHits.children.each(function (item) {
-            console.log(item);
+            //console.log(item);
             if (item.attrs.name !== 'player') {
                 if (x) {
                     var newX = item.attrs.x + x;
@@ -74,11 +74,11 @@ engine = {
         var assetDir = 'assets/';
         engine.images = {};
         for (var src in sources) {
-            console.log(sources[src].count);
+            //console.log(sources[src].count);
             if (sources[src].count > 0) {
                 engine.images[src] = {count: sources[src].count};
                 for(var i = 0; i<sources.count; i++){
-                    console.log(sources);
+                    //console.log(sources);
                     engine.images[src].image[i] = new Image();
                     engine.images[src].image[i].src = assetDir + sources[src].image[i];
                 }

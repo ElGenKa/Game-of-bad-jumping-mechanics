@@ -1,4 +1,5 @@
 var engine;
+var player;
 
 engine = {
     images: {},
@@ -8,8 +9,59 @@ engine = {
     mapMovedY: 0,
     renderFrame: 0,
     npcs: [],
+    bullets: [],
+    interface: null,
     ini: function () {
         engine.loadImages(sources);
+        engine.interface = new Interface();
+
+        player = new Player();
+        player.entity = new Konva.Image({
+            image: engine.images['playerLeft'],
+            x: 1128 / 2 - 33,
+            y: 620 / 2 - 46,
+            name: 'player',
+            width: 66,
+            height: 92
+        });
+        player.entityHitBox = new Konva.Rect({
+            x: 1128 / 2 - 33,
+            y: 620 / 2 + 23,
+            name: 'player',
+            height: 23,
+            width: 66,
+            fill: 'rgba(127,252,255,0.31)'
+        });
+        player.entityHitBullets = new Konva.Rect({
+            x: 1128 / 2 - 33 + 8,
+            y: 620 / 2 - 28,
+            name: 'player',
+            height: 75,
+            width: 50,
+            fill: 'rgba(175,0,33,0.31)'
+        });
+        player.animator = new EntityAnimation(player.entity);
+        player.inventory = new Inventory();
+        player.weapon = new Weapon();
+        player.hpBar = {
+            down: new Konva.Image({
+                image: engine.images['hpBarDown'],
+                width: 100,
+                height: 10,
+                x: 1128 / 2 - 100 + 49,
+                y: 620 / 2 - 70,
+                name: 'playerBar',
+            }),
+            up: new Konva.Rect({
+                fill: 'green',
+                width: 98,
+                height: 8,
+                x: 1128 / 2 - 100 + 49 + 1,
+                y: 620 / 2 - 70 + 1,
+                name: 'playerBar',
+            })
+        };
+
         var selMap = localStorage.getItem('selectMap');
         if (selMap) {
             engine.selectMap = selMap;
@@ -25,14 +77,16 @@ engine = {
     render: function () {
         layerHits.clear();
         player.collisions.checkCollision();
-        player.keys.checkKeys();
-        player.gravity.check();
+        player.upd();
+        engine.interface.upd();
+        //player.keys.checkKeys();
+        //player.gravity.check();
 
-        if (player.noDamageFrames > engine.renderFrame) {
+        /*if (player.noDamageFrames > engine.renderFrame) {
             if (this.renderFrame % 2 !== 1) {
                 player.entityImage.image(engine.images['playerDamage']);
             }
-        }
+        }*/
 
         if (this.renderFrame % 2 !== 1) {
             if (engine.npcs) {
@@ -43,87 +97,6 @@ engine = {
             }
         }
 
-        layerInterface.clear();
-        layerInterface.destroyChildren();
-        layerInterface.add(
-            new Konva.Image({
-                image: engine.images['bgInterface'],
-                width: 150,
-                height: 50,
-                x: 7,
-                y: 7
-            })
-        );
-        layerInterface.add(
-            new Konva.Text({
-                x: 15,
-                y: 15,
-                text: 'Lives: ',
-                fontSize: 14,
-                fontFamily: 'Calibri',
-                fill: 'red'
-            })
-        );
-        for (var iHp = 0; iHp < player.maxLives; iHp++) {
-            if (player.lives > iHp) {
-                layerInterface.add(
-                    new Konva.Image({
-                        image: engine.images['heart'],
-                        x: 50 + (iHp * 13),
-                        y: 15,
-                        name: 'heart',
-                        width: 10,
-                        height: 10
-                    })
-                );
-            } else {
-                layerInterface.add(
-                    new Konva.Image({
-                        image: engine.images['heartZero'],
-                        x: 50 + (iHp * 13),
-                        y: 15,
-                        name: 'heart',
-                        width: 10,
-                        height: 10
-                    })
-                );
-            }
-        }
-        layerInterface.add(
-            new Konva.Text({
-                x: 15,
-                y: 35,
-                text: 'Score: ' + player.score,
-                fontSize: 14,
-                fontFamily: 'Calibri',
-                fill: 'yellow'
-            })
-        );
-
-        this.renderFrame += 1;
-        if (player.lives <= 0) {
-            clearTimeout(gameTimer);
-            layerInterface.add(
-                new Konva.Text({
-                    x: 449,
-                    y: 249,
-                    text: 'GAME OVER',
-                    fontSize: 32,
-                    fontFamily: 'Calibri',
-                    fill: 'black'
-                })
-            );
-            layerInterface.add(
-                new Konva.Text({
-                    x: 450,
-                    y: 250,
-                    text: 'GAME OVER',
-                    fontSize: 32,
-                    fontFamily: 'Calibri',
-                    fill: 'red'
-                })
-            );
-        }
         layerHits.draw();
         layerInterface.draw();
     },
@@ -146,6 +119,16 @@ engine = {
         return (this.haveIntersectionX(r1, r2) || this.haveIntersectionY(r1, r2))
     },
 
+    /**
+     * @return {boolean}
+     */
+    Intersection: function (a, b) {
+        return (b.x > a.x + a.width ||
+            b.x + b.width < a.x ||
+            b.y > a.y + a.height ||
+            b.y + b.height < a.y);
+    },
+
     cameraMoveX: function (x) {
         this.moveAllEntities((x * -1));
     },
@@ -156,7 +139,7 @@ engine = {
 
     moveAllEntities: function (x = 0, y = 0) {
         layerHits.children.each(function (item) {
-            if (item.attrs.name !== 'player') {
+            if (item.attrs.name !== 'player' && item.attrs.name !== 'playerBar') {
                 if (x) {
                     var newX = item.attrs.x + x;
                     item.x(newX);
@@ -173,15 +156,15 @@ engine = {
         var assetDir = 'assets/';
         engine.images = {};
         for (var src in sources) {
-            console.log(sources[src].count);
+            //console.log(sources[src].count);
             if (sources[src].count > 0) {
                 engine.images[src] = {count: sources[src].count, image: []};
-                for(var i = 0; i<sources[src].count; i++){
-                    console.log(sources);
+                for (var i = 0; i < sources[src].count; i++) {
+                    //console.log(sources);
                     engine.images[src].image[i] = new Image();
                     engine.images[src].image[i].src = assetDir + sources[src].image[i];
                 }
-                console.log(engine.images[src]);
+                //console.log(engine.images[src]);
             } else {
                 //console.log(sources[src]);
                 engine.images[src] = new Image();
