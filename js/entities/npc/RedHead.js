@@ -11,7 +11,7 @@ class RedHead extends NpcCore {
         var weapon = {
             rate: 1000,
             reloadRate: 2000,
-            bulletSpeed: 4,
+            bulletSpeed: 9,
             w: 10,
             h: 10
         };

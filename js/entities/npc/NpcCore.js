@@ -60,19 +60,15 @@ class NpcCore {
                             if (engine.haveIntersectionX(itemR, thisNpc)) {
                                 if (thisNpc.centerX > itemR.centerX) {
                                     thisThis.collisions.leftBox = true;
-                                    return false;
                                 } else {
                                     thisThis.collisions.rightBox = true;
-                                    return false;
                                 }
                             }
                             if (engine.haveIntersectionY(itemR, thisNpc)) {
                                 if (thisNpc.centerY > itemR.centerY) {
                                     thisThis.collisions.topBox = true;
-                                    return false;
                                 } else {
                                     thisThis.collisions.downBox = true;
-                                    return false;
                                 }
                             }
                         }

@@ -9,11 +9,12 @@ class BlueHead extends NpcCore {
         };
 
         var weapon = {
-            rate: 1500,
+            rate: 100,
             reloadRate: 3000,
-            bulletSpeed: 4,
-            w: 3,
-            h: 3
+            bulletSpeed: 6,
+            w: 7,
+            h: 7,
+            damage: 10
         };
 
         return super(x, y, textures, 50, 50, 200, 200, true, 500, 'BlueHead', weapon, 1);

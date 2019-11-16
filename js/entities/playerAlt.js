@@ -9,7 +9,7 @@ class Player {
         this.hp = 101;
         this.hpMax = 101;
         this.hpBar = null;
-        this.speed = 3;
+        this.speed = 6;
         this.deadTimer = null;
         this.collisions = {
             checkCollision: function () {

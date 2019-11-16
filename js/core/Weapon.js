@@ -57,7 +57,7 @@ class Weapon {
         if (params.bulletSpeed)
             this.bulletSpeed = params.bulletSpeed;
         else
-            this.bulletSpeed = 10;
+            this.bulletSpeed = 20;
     }
 
     addModifer(modifer, param = null) {

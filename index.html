@@ -46,10 +46,10 @@
 </html>
 <script>
     // Инициализируем двигло
-    if (window.Worker) {
+    /*if (window.Worker) {
         var myWorker = new Worker("./js/core/BulletWorker.js");
         //myWorker.work(engine.bullets);
-    }
+    }*/
     var layerHits = new Konva.Layer();
     var layerInterface = new Konva.Layer();
     var layerFon = new Konva.Layer();
@@ -109,5 +109,5 @@
     //Запускаем цикл игры
     var gameTimer = setInterval(function () {
         engine.render();
-    }, 20);
+    }, 33);
 </script>

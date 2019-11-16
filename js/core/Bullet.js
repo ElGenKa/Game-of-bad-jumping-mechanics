@@ -18,14 +18,6 @@ class Bullet {
                 .height(bullet.h)
                 .x(x)
                 .y(y);
-            /*this.entity = new Konva.Rect({
-                width: bullet.w,
-                height: bullet.h,
-                x: x,
-                y: y,
-                fill: 'red',
-                name: 'bullet'
-            });*/
             layerHits.add(this.entity);
             this.live = true;
             this.autoDestroy = setTimeout(function (bullet) {

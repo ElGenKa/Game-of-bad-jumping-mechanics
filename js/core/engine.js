@@ -94,14 +94,10 @@ engine = {
                 });
             }
         }
-        if (window.Worker) {
-            //var myWorker = new Worker("js/core/BulletWorker.js");
-            myWorker.work(engine.bullets);
-        }else{
-            engine.bullets.forEach(function (item) {
-                item.upd();
-            });
-        }
+
+        engine.bullets.forEach(function (item) {
+            item.upd();
+        });
 
         layerHits.draw();
         layerInterface.draw();
