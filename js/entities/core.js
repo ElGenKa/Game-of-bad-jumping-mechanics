@@ -5,6 +5,7 @@ class Core {
         this.include('js/core/EntityAnimation.js');
         this.include('js/core/Inventory.js');
         this.include('js/core/Weapon.js');
+        this.include('js/core/Bullet.js');
         this.include('js/core/Interface.js');
         this.include('js/entities/playerAlt.js');
         //npc

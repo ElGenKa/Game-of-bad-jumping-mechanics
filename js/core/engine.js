@@ -108,6 +108,10 @@ engine = {
             }
         }
 
+        engine.bullets.forEach(function (item) {
+            item.upd();
+        });
+
         layerHits.draw();
         layerInterface.draw();
     },

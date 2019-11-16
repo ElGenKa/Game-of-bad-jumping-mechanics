@@ -1,6 +1,5 @@
 class NpcCore {
-    constructor(x, y, textures, w, h, addScore, hp, killer, viewDistance, name) {
-        //this.type = type;
+    constructor(x, y, textures, w, h, addScore, hp, killer, viewDistance, name, weapon) {
         this.entity = null;
         this.speed = 1;
         this.viewDistance = viewDistance;
@@ -20,7 +19,6 @@ class NpcCore {
         var drag = false;
         if (engine.editor === 1)
             drag = true;
-        //console.log(textures.front);
         entity = new Konva.Image({
             image: textures.front,
             x: x,
@@ -33,7 +31,7 @@ class NpcCore {
         });
         this.animator = new EntityAnimation(entity);
         this.entity = entity;
-        //layerHits.add(entity);
+        this.weapon = new Weapon(weapon);
         engine.npcI += 1;
         engine.npcs.push(this);
         return entity;
@@ -95,6 +93,7 @@ class NpcCore {
             var playerDistanceY = player.entity.y() - y;
             //console.log(playerDistanceX);
             if (playerDistanceX < this.viewDistance && playerDistanceX > -this.viewDistance) {
+                this.weapon.fire(this.entity.getClientRect(),player.entity.getClientRect(),false);
                 if (playerDistanceX > 0) {
                     //console.log('1');
                     this.moveX(this.speed, 'right');

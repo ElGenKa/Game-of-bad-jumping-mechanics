@@ -173,7 +173,7 @@ class Player {
 
         if(this.keys.space){
             //console.log(this.weapon);
-            this.weapon.fire(false,false,false);
+            this.weapon.fire(this.entity.getClientRect(),layerHits.getStage().getPointerPosition(),true);
         }
 
         if(this.keys.r){

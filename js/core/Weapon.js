@@ -1,7 +1,11 @@
 class Weapon {
-    constructor() {
+    constructor(params = {}) {
+        console.log(params);
         this.damage = 25;
-        this.rate = 1000;
+        if (params.rate)
+            this.rate = params.rate;
+        else
+            this.rate = 300;
         this.reflection = false;
         this.incendiary = false;
         this.vampirism = false;
@@ -9,8 +13,15 @@ class Weapon {
         this.inReload = false;
         this.bullets = 10;
         this.maxBullets = 10;
-        this.reloadRate = 2500;
+        if (params.reloadRate)
+            this.reloadRate = params.reloadRate;
+        else
+            this.reloadRate = 1000;
         this.reloadTimer = null;
+        if (params.bulletSpeed)
+            this.bulletSpeed = params.bulletSpeed;
+        else
+            this.bulletSpeed = 10;
     }
 
     addModifer(modifer, param = null) {
@@ -58,10 +69,9 @@ class Weapon {
         if (!this.inReload) {
             if (this.bullets > 0) {
                 if (!this.inFire) {
-                    // console.log(this);
                     this.bullets -= 1;
-                    //var bullet = new Bullet(starter.x(), starter.y(), endler.x(), endler.y(), player);
-                    //engine.bullets.push(bullet);
+                    var bullet = new Bullet(starter.x + (starter.width / 2), starter.y + (starter.height / 2), endler.x, endler.y, this, player);
+                    engine.bullets.push(bullet);
                     this.inFire = true;
                     setTimeout(function (weapon) {
                         weapon.inFire = false;
@@ -85,7 +95,7 @@ class Weapon {
 
             this.reloadTimer = setInterval(function (weapon) {
                 weapon.bullets += 1;
-                if(weapon.bullets === weapon.maxBullets)
+                if (weapon.bullets === weapon.maxBullets)
                     clearInterval(weapon.reloadTimer);
             }, this.reloadRate / this.maxBullets, this);
         }
