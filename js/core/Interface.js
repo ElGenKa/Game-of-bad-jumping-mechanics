@@ -2,7 +2,6 @@ class Interface {
     constructor() {
 
     }
-
     upd() {
         //player
         var hpBar = player.hpBar;
@@ -19,7 +18,6 @@ class Interface {
         } else {
             barColor = 'red';
         }
-        //console.log(procentHp);
         hpBarUp.fill(barColor);
         hpBarUp.width((98 / 100) * procentHp);
 
@@ -34,56 +32,23 @@ class Interface {
                 }
             }
         });
-
-
-        /*var bullet;
-
-        for (i = 0; i < player.weapon.maxBullets; i++) {
-            bullet = new Konva.Image({
-                x: 10,
-                y: 10 + i*15,
-                image: engine.images['playerBulletEmpty']
-            });
-            layerInterface.add(bullet);
-        }
-        */
-
-        //
-        /*var i;
-
-        var pw = player.weapon;*/
-
-        /*layerInterface.children.each(function (item) {
-            //if(item.attrs.name === 'bullet')
-            //    item.destroy();
-        });
-        var bullet;
-        for (i = 0; i < pw.maxBullets; i++) {
-            bullet = new Konva.Image({
-                x: 10,
-                y: 10 + i*15,
-                image: engine.images['playerBulletEmpty']
-            });
-            layerInterface.add(bullet);
-        }
-        for (i = 0; i < pw.bullets; i++) {
-            bullet = new Konva.Image({
-                x: 10,
-                y: 10 + i*15,
-                image: engine.images['playerBullet']
-            });
-            layerInterface.add(bullet);
-        }*/
-
-        /*hpBarDown.x( player.entity.x() - player.entity.width / 2 );
-        hpBarDown.x( player.entity.y() - player.entity.height  - 10 );
-
-        hpBarUp.x( hpBarDown.x() + 1 );
-        hpBarUp.y( hpBarDown.y() + 1 );*/
-
         //enemies
         engine.npcs.forEach(function (npc) {
-            //code
+            if(npc.live){
+                //console.log(npc.hpBar);
+                var procentHp = (npc.hp / npc.maxHp) * 100;
+                if (procentHp === 100) {
+                    barColor = 'green';
+                } else if (procentHp < 100 && procentHp > 25) {
+                    barColor = 'yellow';
+                } else {
+                    barColor = 'red';
+                }
+                npc.hpBar.fill(barColor);
+                npc.hpBar.width((50 / 100) * procentHp);
+                npc.hpBar.x(npc.entity.x());
+                npc.hpBar.y(npc.entity.y() - 5);
+            }
         });
     }
 }

@@ -3,6 +3,7 @@ class Core {
     constructor() {
         //Игрок
         this.include('js/core/EntityAnimation.js');
+        this.include('js/core/BulletWorker.js');
         this.include('js/core/Inventory.js');
         this.include('js/core/Weapon.js');
         this.include('js/core/Bullet.js');
@@ -31,7 +32,8 @@ class Core {
 
         //NPC
         this.include('js/entities/npc/NpcCore.js'); //Ядро блоков
-        this.include('js/entities/npc/RedHead.js'); //хрень
+        this.include('js/entities/npc/RedHead.js'); //Медленно стреляющая хрень
+        this.include('js/entities/npc/BlueHead.js'); //Быстро стреляющая хрень
     }
 
     include(url) {

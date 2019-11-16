@@ -1,23 +1,59 @@
 class Weapon {
     constructor(params = {}) {
-        console.log(params);
-        this.damage = 25;
+        this.reloadTimer = null;
+        this.inFire = false;
+        this.inReload = false;
+
+        if (params.w)
+            this.w = params.w;
+        else
+            this.w = 5;
+
+        if (params.h)
+            this.h = params.h;
+        else
+            this.h = 5;
+
+        if (params.damage)
+            this.damage = params.damage;
+        else
+            this.damage = 25;
+
         if (params.rate)
             this.rate = params.rate;
         else
             this.rate = 300;
-        this.reflection = false;
-        this.incendiary = false;
-        this.vampirism = false;
-        this.inFire = false;
-        this.inReload = false;
-        this.bullets = 10;
-        this.maxBullets = 10;
+
+        if (params.reflection)
+            this.reflection = params.reflection;
+        else
+            this.reflection = false;
+
+        if (params.incendiary)
+            this.incendiary = params.incendiary;
+        else
+            this.incendiary = false;
+
+        if (params.vampirism)
+            this.vampirism = params.vampirism;
+        else
+            this.vampirism = false;
+
+        if (params.bullets)
+            this.bullets = params.bullets;
+        else
+            this.bullets = 10;
+
+        if (params.maxBullets)
+            this.maxBullets = params.maxBullets;
+        else
+            this.maxBullets = 10;
+
         if (params.reloadRate)
             this.reloadRate = params.reloadRate;
         else
             this.reloadRate = 1000;
-        this.reloadTimer = null;
+
         if (params.bulletSpeed)
             this.bulletSpeed = params.bulletSpeed;
         else
@@ -70,7 +106,12 @@ class Weapon {
             if (this.bullets > 0) {
                 if (!this.inFire) {
                     this.bullets -= 1;
-                    var bullet = new Bullet(starter.x + (starter.width / 2), starter.y + (starter.height / 2), endler.x, endler.y, this, player);
+                    //var bullet = new Bullet(starter.x + (starter.width / 2), starter.y + (starter.height / 2), endler.x, endler.y, this, player);
+                    //console.log(bulletClassProto);
+                    var bullet = Object.assign({}, bulletClassProto);
+                    bullet.setData(starter.x + (starter.width / 2), starter.y + (starter.height / 2), endler.x, endler.y, this, player);
+                    //var bullet = new Bullet(starter.x + (starter.width / 2), starter.y + (starter.height / 2), endler.x, endler.y, this, player);
+                    //var bullet = bulletProto.clone().setData(starter.x + (starter.width / 2), starter.y + (starter.height / 2), endler.x, endler.y, this, player);
                     engine.bullets.push(bullet);
                     this.inFire = true;
                     setTimeout(function (weapon) {

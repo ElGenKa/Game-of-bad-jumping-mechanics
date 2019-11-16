@@ -45,6 +45,9 @@
 </body>
 </html>
 <script>
+    var layerHits = new Konva.Layer();
+    var layerInterface = new Konva.Layer();
+
     // Инициализируем ядро
     engine.ini();
 
@@ -56,7 +59,7 @@
     });
 
     // далее создаём слой
-    var layerHits = new Konva.Layer();
+
 
     // далее инициализируем карту
     initMap(engine.selectMap);

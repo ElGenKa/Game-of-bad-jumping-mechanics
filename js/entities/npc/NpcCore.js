@@ -1,10 +1,11 @@
 class NpcCore {
-    constructor(x, y, textures, w, h, addScore, hp, killer, viewDistance, name, weapon) {
+    constructor(x, y, textures, w, h, addScore, hp, killer, viewDistance, name, weapon, speed) {
         this.entity = null;
-        this.speed = 1;
+        this.speed = speed;
         this.viewDistance = viewDistance;
         this.killer = killer;
         this.hp = hp;
+        this.maxHp = hp;
         this.addScore = addScore;
         this.status = 'idle';
         this.textures = textures;
@@ -14,7 +15,6 @@ class NpcCore {
             rightBox: false,
             downBox: false,
         };
-
         var entity;
         var drag = false;
         if (engine.editor === 1)
@@ -28,15 +28,22 @@ class NpcCore {
             name: 'npcEnemy',
             draggable: drag,
             tNpc: name,
+            controller: this
         });
         this.animator = new EntityAnimation(entity);
         this.entity = entity;
+        this.hpBar = new Konva.Rect({
+            width: 50,
+            height: 4
+        });
+        layerInterface.add(this.hpBar);
         this.weapon = new Weapon(weapon);
+        this.live = true;
+        this.deadTimer = null;
         engine.npcI += 1;
         engine.npcs.push(this);
         return entity;
     }
-
     upd() {
         if (this.hp > 0) {
             var thisNpc = this.entity.getClientRect();
@@ -50,111 +57,96 @@ class NpcCore {
                             itemR.centerY = itemR.y + itemR.height / 2;
                             thisNpc.centerX = thisNpc.x + thisNpc.width / 2;
                             thisNpc.centerY = thisNpc.y + thisNpc.height / 2;
-
-                            //console.log(itemR.centerX + " " + thisNpc.centerX);
-                            var direc = 0;
                             if (engine.haveIntersectionX(itemR, thisNpc)) {
-                                //console.log(itemR.centerX + " " + thisNpc.centerX);
                                 if (thisNpc.centerX > itemR.centerX) {
-                                    //console.log(itemR);
                                     thisThis.collisions.leftBox = true;
-                                    /*direc = ((itemR.x + itemR.width) - playerR.x);
-                                    //player.moveX(direc, 'right');*/
+                                    return false;
                                 } else {
-                                    //console.log('2');
                                     thisThis.collisions.rightBox = true;
-                                    /*direc = ((playerR.x + playerR.width) - itemR.x);
-                                    //player.moveX(direc, 'left');*/
+                                    return false;
                                 }
-
                             }
                             if (engine.haveIntersectionY(itemR, thisNpc)) {
                                 if (thisNpc.centerY > itemR.centerY) {
-                                    //console.log('3');
                                     thisThis.collisions.topBox = true;
-                                    /*direc = itemR.y - playerR.y;
-                                    //player.moveY(direc, 'down');*/
+                                    return false;
                                 } else {
-                                    //console.log('4');
                                     thisThis.collisions.downBox = true;
-                                    /*direc = playerR.y - itemR.y;
-                                    //player.moveY(direc, 'top');*/
+                                    return false;
                                 }
-
                             }
                         }
                     }
                 }
             );
-
             var x = this.entity.attrs.x;
             var y = this.entity.attrs.y;
             var playerDistanceX = player.entity.x() - x;
             var playerDistanceY = player.entity.y() - y;
-            //console.log(playerDistanceX);
             if (playerDistanceX < this.viewDistance && playerDistanceX > -this.viewDistance) {
-                this.weapon.fire(this.entity.getClientRect(),player.entity.getClientRect(),false);
+                var playerDirect = player.entity.getClientRect();
+                playerDirect.x = playerDirect.x + playerDirect.width / 2;
+                playerDirect.y = playerDirect.y + playerDirect.height / 2;
+                this.weapon.fire(this.entity.getClientRect(), playerDirect, false);
                 if (playerDistanceX > 0) {
-                    //console.log('1');
                     this.moveX(this.speed, 'right');
                     this.animator.start(this.textures['right']);
                 } else {
-                    //console.log('2');
                     this.moveX(-this.speed, 'left');
                     this.animator.start(this.textures['left']);
                 }
             }
             if (playerDistanceY < this.viewDistance && playerDistanceY > -this.viewDistance) {
                 if (playerDistanceY < this.viewDistance && playerDistanceY > 0) {
-                    //console.log('3');
                     this.moveY(this.speed, 'down');
                     this.animator.start(this.textures['down']);
                 } else {
-                    //console.log('4');
                     this.moveY(this.speed, 'top');
                     this.animator.start(this.textures['top']);
                 }
-            }
-            else{
-                //console.log('5');
+            } else {
                 this.animator.stop();
                 this.entity.image(this.textures['front']);
             }
+        } else if(this.hp <= 0) {
+            if (this.live) {
+                this.live = false;
+                this.deadTimer = setInterval(function (npc) {
+                    var newOp = npc.entity.opacity() - 0.1;
+                    npc.entity.opacity(newOp);
+                    if (newOp <= 0) {
+                        clearInterval(npc.deadTimer);
+                        npc.entity.destroy();
+                    }
+                }, 100, this)
+            }
         }
     }
-
     moveX(speed, direction) {
-        //console.log(this.collisions);
         var newX;
         if (direction === 'left') {
             if (!this.collisions.leftBox) {
-                newX = this.entity.x()-this.speed;
-                //console.log(newX);
-                this.entity.x( newX );
-                //engine.cameraMoveX(-this.speed);
+                newX = this.entity.x() - this.speed;
+                this.entity.x(newX);
             }
         } else {
             if (!this.collisions.rightBox) {
-                newX = this.entity.x()+this.speed;
-                //console.log(newX);
-                this.entity.x( newX )
+                newX = this.entity.x() + this.speed;
+                this.entity.x(newX)
             }
         }
     }
-
     moveY(speed, direction) {
         var newY;
         if (direction === 'top') {
             if (!this.collisions.topBox) {
-                //engine.cameraMoveY(-this.speed);
-                newY = this.entity.y()-this.speed;
-                this.entity.y( newY )
+                newY = this.entity.y() - this.speed;
+                this.entity.y(newY)
             }
         } else {
             if (!this.collisions.downBox) {
-                //engine.cameraMoveY(this.speed);
-                newY = this.entity.y()+this.speed;
-                this.entity.y( newY )
+                newY = this.entity.y() + this.speed;
+                this.entity.y(newY)
             }
         }
     }

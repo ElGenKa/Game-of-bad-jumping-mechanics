@@ -46,11 +46,28 @@
 </html>
 <script>
     // Инициализируем двигло
-
+    if (window.Worker) {
+        var myWorker = new Worker("./js/core/BulletWorker.js");
+        //myWorker.work(engine.bullets);
+    }
     var layerHits = new Konva.Layer();
     var layerInterface = new Konva.Layer();
     var layerFon = new Konva.Layer();
-
+    layerFon.add(
+        new Konva.Rect({
+            width: 1200,
+            height: 670,
+            fill: 'gray'
+        })
+    );
+    //layerFon.fill('gray');
+    var bulletProto = new Konva.Rect({
+        x: -1000,
+        y: -1000,
+        fill: 'red',
+        name: 'bullet'
+    });
+    var bulletClassProto = new Bullet();
     engine.ini();
 
     //создаём контейнер
@@ -69,8 +86,8 @@
     layerHits.add(player.entity);
     layerInterface.add(player.hpBar.down);
     layerInterface.add(player.hpBar.up);
-    layerInterface.add(player.entityHitBox);
-    layerInterface.add(player.entityHitBullets);
+    layerHits.add(player.entityHitBox);
+    layerHits.add(player.entityHitBullets);
 
     //var interface = new Interface();
 
@@ -92,5 +109,5 @@
     //Запускаем цикл игры
     var gameTimer = setInterval(function () {
         engine.render();
-    }, 10);
+    }, 20);
 </script>

@@ -1,4 +1,4 @@
-class RedHead extends NpcCore {
+class BlueHead extends NpcCore {
     constructor(x, y) {
         var textures = {
             'front': engine.images['redHeadFront'],
@@ -9,13 +9,13 @@ class RedHead extends NpcCore {
         };
 
         var weapon = {
-            rate: 1000,
-            reloadRate: 2000,
+            rate: 1500,
+            reloadRate: 3000,
             bulletSpeed: 4,
-            w: 10,
-            h: 10
+            w: 3,
+            h: 3
         };
 
-        return super(x, y, textures, 50, 50, 100, 100, true, 500, 'RedHead', weapon, 2);
+        return super(x, y, textures, 50, 50, 200, 200, true, 500, 'BlueHead', weapon, 1);
     }
 }

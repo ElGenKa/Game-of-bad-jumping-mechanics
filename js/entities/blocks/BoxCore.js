@@ -8,7 +8,6 @@ class BoxCore {
         this.name = name;
         return this.draw();
     }
-
     draw(){
         var drag = false;
         if (engine.editor === 1)
@@ -17,7 +16,8 @@ class BoxCore {
             x: this.x,
             y: this.y,
             draggable: drag,
-            t: this.name
+            t: this.name,
+            name: 'box'
         });
         var entity;
         if(this.image.count === 1) {
@@ -43,7 +43,6 @@ class BoxCore {
                 group.add(entity);
             }
         }
-        //group.strokeEnabled(false);
         return group;
     }
 }

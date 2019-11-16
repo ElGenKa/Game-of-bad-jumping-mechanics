@@ -28,16 +28,15 @@ engine = {
             y: 620 / 2 + 23,
             name: 'player',
             height: 23,
-            width: 33,
-            fill: 'rgba(127,252,255,0.6)'
+            width: 33
         });
         player.entityHitBullets = new Konva.Rect({
             x: 1128 / 2 - 33 + 8,
             y: 620 / 2 - 28,
             name: 'player',
+            subName: 'bulletBox',
             height: 75,
-            width: 50,
-            fill: 'rgba(175,0,33,0.6)'
+            width: 50
         });
         player.animator = new EntityAnimation(player.entity);
         player.inventory = new Inventory();
@@ -65,7 +64,7 @@ engine = {
         for (i = 0; i < player.weapon.maxBullets; i++) {
             bullet = new Konva.Image({
                 x: 10,
-                y: 10 + i*15,
+                y: 10 + i * 15,
                 name: 'bullet',
                 image: engine.images['playerBulletEmpty']
             });
@@ -83,34 +82,26 @@ engine = {
             location.reload();
         });
     },
-
     render: function () {
         layerHits.clear();
         player.collisions.checkCollision();
         player.upd();
         engine.interface.upd();
-        //player.keys.checkKeys();
-        //player.gravity.check();
-
-        /*if (player.noDamageFrames > engine.renderFrame) {
-            if (this.renderFrame % 2 !== 1) {
-                player.entityImage.image(engine.images['playerDamage']);
-            }
-        }*/
-
         if (this.renderFrame % 2 !== 1) {
             if (engine.npcs) {
                 engine.npcs.forEach(function (item) {
-                    if (item.hp > 0){
-                        item.upd();
-                    }
+                    item.upd();
                 });
             }
         }
-
-        engine.bullets.forEach(function (item) {
-            item.upd();
-        });
+        if (window.Worker) {
+            //var myWorker = new Worker("js/core/BulletWorker.js");
+            myWorker.work(engine.bullets);
+        }else{
+            engine.bullets.forEach(function (item) {
+                item.upd();
+            });
+        }
 
         layerHits.draw();
         layerInterface.draw();
