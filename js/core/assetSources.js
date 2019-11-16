@@ -1,5 +1,7 @@
 var sources = {
     //Скачанные текстуры
+    playerBullet: 'Bullet.png',
+    playerBulletEmpty: 'BulletEmpty.png',
     hpBarDown: 'hpBarDown.png',
     heart: 'download/HUD/hud_heartFull.png',
     heartZero: 'download/HUD/hud_heartEmpty.png',

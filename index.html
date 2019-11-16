@@ -46,6 +46,11 @@
 </html>
 <script>
     // Инициализируем двигло
+
+    var layerHits = new Konva.Layer();
+    var layerInterface = new Konva.Layer();
+    var layerFon = new Konva.Layer();
+
     engine.ini();
 
     //создаём контейнер
@@ -56,15 +61,14 @@
     });
 
     // далее создаём слой
-    var layerHits = new Konva.Layer();
-    var layerInterface = new Konva.Layer();
-    var layerFon = new Konva.Layer();
+
 
     // далее инициализируем карту
     initMap(engine.selectMap);
 
     layerHits.add(player.entity);
     layerInterface.add(player.hpBar.down);
+    layerInterface.add(player.hpBar.up);
     layerInterface.add(player.entityHitBox);
     layerInterface.add(player.entityHitBullets);
 

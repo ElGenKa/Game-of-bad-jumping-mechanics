@@ -14,7 +14,6 @@ engine = {
     ini: function () {
         engine.loadImages(sources);
         engine.interface = new Interface();
-
         player = new Player();
         player.entity = new Konva.Image({
             image: engine.images['playerLeft'],
@@ -25,12 +24,12 @@ engine = {
             height: 92
         });
         player.entityHitBox = new Konva.Rect({
-            x: 1128 / 2 - 33,
+            x: 1128 / 2 - 15,
             y: 620 / 2 + 23,
             name: 'player',
             height: 23,
-            width: 66,
-            fill: 'rgba(127,252,255,0.31)'
+            width: 33,
+            fill: 'rgba(127,252,255,0.6)'
         });
         player.entityHitBullets = new Konva.Rect({
             x: 1128 / 2 - 33 + 8,
@@ -38,7 +37,7 @@ engine = {
             name: 'player',
             height: 75,
             width: 50,
-            fill: 'rgba(175,0,33,0.31)'
+            fill: 'rgba(175,0,33,0.6)'
         });
         player.animator = new EntityAnimation(player.entity);
         player.inventory = new Inventory();
@@ -61,6 +60,17 @@ engine = {
                 name: 'playerBar',
             })
         };
+
+        var bullet;
+        for (i = 0; i < player.weapon.maxBullets; i++) {
+            bullet = new Konva.Image({
+                x: 10,
+                y: 10 + i*15,
+                name: 'bullet',
+                image: engine.images['playerBulletEmpty']
+            });
+            layerInterface.add(bullet);
+        }
 
         var selMap = localStorage.getItem('selectMap');
         if (selMap) {

@@ -10,6 +10,7 @@ class Weapon {
         this.bullets = 10;
         this.maxBullets = 10;
         this.reloadRate = 2500;
+        this.reloadTimer = null;
     }
 
     addModifer(modifer, param = null) {
@@ -53,13 +54,14 @@ class Weapon {
         }
     }
 
-    fire(starter, endler, player = false) {
+    fire(starter = false, endler = false, player = false) {
         if (!this.inReload) {
             if (this.bullets > 0) {
                 if (!this.inFire) {
+                    console.log(this);
                     this.bullets -= 1;
-                    var bullet = new Bullet(starter.x(), starter.y(), endler.x(), endler.y(), player);
-                    engine.bullets.push(bullet);
+                    //var bullet = new Bullet(starter.x(), starter.y(), endler.x(), endler.y(), player);
+                    //engine.bullets.push(bullet);
                     this.inFire = true;
                     setTimeout(function (weapon) {
                         weapon.inFire = false;
@@ -74,11 +76,18 @@ class Weapon {
     reload() {
         if (!this.inReload) {
             this.inReload = true;
+            this.bullets = 0;
             setTimeout(function (weapon) {
                 weapon.inReload = false;
                 weapon.bullets = weapon.maxBullets;
                 weapon.inReload = false;
-            }, this.reloadRate, this);
+            }, this.reloadRate + 10, this);
+
+            this.reloadTimer = setInterval(function (weapon) {
+                weapon.bullets += 1;
+                if(weapon.bullets === weapon.maxBullets)
+                    clearInterval(weapon.reloadTimer);
+            }, this.reloadRate / this.maxBullets, this);
         }
     }
 }
