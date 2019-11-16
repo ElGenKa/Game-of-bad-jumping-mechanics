@@ -129,7 +129,12 @@ engine = {
         var res = layerHits.children;
         var contentTemp = [];
         res.forEach(function (item) {
-            contentTemp.push({x: item.x(), y: item.y(), t: item.attrs.t, tNpc: item.attrs.tNpc});
+            if(item.attrs.name === 'npcEnemy'){
+                contentTemp.push({x: item.x(), y: item.y(), t: item.attrs.tNpc});
+            }else{
+                contentTemp.push({x: item.x(), y: item.y(), t: item.attrs.t, tNpc: item.attrs.tNpc});
+            }
+            //contentTemp.push({x: item.x(), y: item.y(), t: item.attrs.t, tNpc: item.attrs.tNpc});
         });
         var content = JSON.stringify(contentTemp);
         var fileName = 'map.txt';
@@ -149,6 +154,7 @@ engine = {
         var entity = eval("new " + $('#object_t').val() + "("+engine.selected.x()+","+engine.selected.y()+")");
         engine.selected.destroy();
         layerHits.add(entity);
+        console.log(entity);
     }
 
 };

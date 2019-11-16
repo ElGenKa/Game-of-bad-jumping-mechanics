@@ -65,21 +65,27 @@
     stage.add(layerHits);
 
     //События блоков
-    layerHits.on('mouseover', function(evt) { //Наведение мышки
+    layerHits.on('mouseover', function (evt) { //Наведение мышки
         var shape = evt.target;
         document.body.style.cursor = 'pointer';
         //shape.strokeEnabled(true);
         layerHits.draw();
     });
-    layerHits.on('mouseout', function(evt) { //Отвод мышки
+    layerHits.on('mouseout', function (evt) { //Отвод мышки
         var shape = evt.target;
         document.body.style.cursor = 'default';
         //shape.strokeEnabled(false);
         layerHits.draw();
     });
-    layerHits.on('click', function(evt) { //Клик мышки
+    layerHits.on('click', function (evt) { //Клик мышки
         engine.selected = evt.target.attrs.parent;
-        $('#object_t').val(evt.target.attrs.parent.attrs.t)
+        if (evt.target.attrs.parent)
+            $('#object_t').val(evt.target.attrs.parent.attrs.t);
+        else{
+            if(evt.target.attrs.tNpc)
+                $('#object_t').val(evt.target.attrs.tNpc)
+        }
+
     });
 
     //Отлавливаем нажатия клавишь

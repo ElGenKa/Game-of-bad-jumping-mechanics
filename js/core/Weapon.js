@@ -58,7 +58,7 @@ class Weapon {
         if (!this.inReload) {
             if (this.bullets > 0) {
                 if (!this.inFire) {
-                    console.log(this);
+                    // console.log(this);
                     this.bullets -= 1;
                     //var bullet = new Bullet(starter.x(), starter.y(), endler.x(), endler.y(), player);
                     //engine.bullets.push(bullet);

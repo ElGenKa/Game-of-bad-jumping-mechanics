@@ -17,7 +17,7 @@ class Player {
                     var itemR = item.getClientRect();
                     var playerR = player.entityHitBox.getClientRect();
                     var coll;
-                    if (item.attrs.name !== 'decoration' && item.attrs.name !== 'player') {
+                    if (item.attrs.name !== 'decoration' && item.attrs.name !== 'player' && item.attrs.name !== 'npcEnemy') {
                         if (!engine.Intersection(itemR, playerR)) {
 
                             itemR.centerX = itemR.x + itemR.width / 2;
@@ -28,48 +28,26 @@ class Player {
                             //console.log(itemR.centerX + " " + playerR.centerX);
                             var direc = 0;
                             if (engine.haveIntersectionX(itemR, playerR)) {
-                                if (engine.haveIntersectionY(itemR, playerR)) {
-                                    if (playerR.centerY > itemR.centerY) {
-                                        player.collisions.topBox = true;
-                                        direc = itemR.y - playerR.y;
-                                        //player.moveY(direc, 'down');
-                                    } else {
-                                        player.collisions.downBox = true;
-                                        direc = playerR.y - itemR.y;
-                                        //player.moveY(direc, 'top');
-                                    }
-                                }
                                 if (playerR.centerX > itemR.centerX) {
                                     player.collisions.leftBox = true;
-                                    direc = ((itemR.x + itemR.width) - playerR.x);
-                                    //player.moveX(direc, 'right');
+                                    /*direc = ((itemR.x + itemR.width) - playerR.x);
+                                    //player.moveX(direc, 'right');*/
                                 } else {
                                     player.collisions.rightBox = true;
-                                    direc = ((playerR.x + playerR.width) - itemR.x);
-                                    //player.moveX(direc, 'left');
+                                    /*direc = ((playerR.x + playerR.width) - itemR.x);
+                                    //player.moveX(direc, 'left');*/
                                 }
 
                             }
                             if (engine.haveIntersectionY(itemR, playerR)) {
-                                if (engine.haveIntersectionX(itemR, playerR)) {
-                                    if (playerR.centerX > itemR.centerX) {
-                                        player.collisions.leftBox = true;
-                                        direc = ((itemR.x + itemR.width) - playerR.x);
-                                        //player.moveX(direc, 'right');
-                                    } else {
-                                        player.collisions.rightBox = true;
-                                        direc = ((playerR.x + playerR.width) - itemR.x);
-                                        //player.moveX(direc, 'left');
-                                    }
-                                }
                                 if (playerR.centerY > itemR.centerY) {
                                     player.collisions.topBox = true;
-                                    direc = itemR.y - playerR.y;
-                                    //player.moveY(direc, 'down');
+                                    /*direc = itemR.y - playerR.y;
+                                    //player.moveY(direc, 'down');*/
                                 } else {
                                     player.collisions.downBox = true;
-                                    direc = playerR.y - itemR.y;
-                                    //player.moveY(direc, 'top');
+                                    /*direc = playerR.y - itemR.y;
+                                    //player.moveY(direc, 'top');*/
                                 }
 
                             }
@@ -209,7 +187,7 @@ class Player {
             if (!this.collisions.leftBox) {
                 engine.cameraMoveX(-this.speed);
             }
-        } else if ('right') {
+        } else {
             if (!this.collisions.rightBox) {
                 engine.cameraMoveX(this.speed);
             }
@@ -221,7 +199,7 @@ class Player {
             if (!this.collisions.topBox) {
                 engine.cameraMoveY(-this.speed);
             }
-        } else if ('down') {
+        } else {
             if (!this.collisions.downBox) {
                 engine.cameraMoveY(this.speed);
             }

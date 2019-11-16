@@ -101,8 +101,9 @@ engine = {
         if (this.renderFrame % 2 !== 1) {
             if (engine.npcs) {
                 engine.npcs.forEach(function (item) {
-                    if (item.hp > 0)
+                    if (item.hp > 0){
                         item.upd();
+                    }
                 });
             }
         }

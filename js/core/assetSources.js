@@ -12,12 +12,12 @@ var sources = {
     sandMid: 'download/Tiles/castleCenter.png',
     DecBush: 'download/Items/bush.png',
     DecRock: 'download/Items/rock.png',
-    playerLeft: 'download/Player/playerLeft.png',
+    /*playerLeft: 'download/Player/playerLeft.png',
     playerRight: 'download/Player/playerRight.png',
     playerJumpLeft: 'download/Player/playerJumpLeft.png',
     playerHurtLeft: 'download/Player/playerHurtLeft.png',
     playerJumpRight: 'download/Player/playerJumpRight.png',
-    playerHurtRight: 'download/Player/playerHurtRight.png',
+    playerHurtRight: 'download/Player/playerHurtRight.png',*/
     playerAnimateLeft: {
         count: 10,
         image: [
@@ -146,6 +146,35 @@ var sources = {
             'download/Player/p1_walk/PNG/p1_walk11.png'
         ]
     },
+    redHeadAnimateLeft: {
+        count: 2,
+        image: [
+            'download/Enemies/blockerBody.png',
+            'download/Enemies/blockerBody.png'
+        ]
+    },
+    redHeadAnimateRight: {
+        count: 2,
+        image: [
+            'download/Enemies/blockerBody.png',
+            'download/Enemies/blockerBody.png'
+        ]
+    },
+    redHeadAnimateTop: {
+        count: 2,
+        image: [
+            'download/Enemies/blockerBody.png',
+            'download/Enemies/blockerBody.png'
+        ]
+    },
+    redHeadAnimateDown: {
+        count: 2,
+        image: [
+            'download/Enemies/blockerBody.png',
+            'download/Enemies/blockerBody.png'
+        ]
+    },
+    redHeadFront: 'download/Enemies/blockerBody.png',
     playerFront: 'download/Player/playerFront.png',
     //Старые текстуры
     bgInterface: 'bgInterface.png',

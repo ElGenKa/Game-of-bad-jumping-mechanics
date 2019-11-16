@@ -8,7 +8,7 @@ class Core {
         this.include('js/core/Interface.js');
         this.include('js/entities/playerAlt.js');
         //npc
-        this.include('js/entities/Npc.js');
+        //this.include('js/entities/Npc.js');
 
         //Декорации
         this.include('js/entities/decoration/DecorationCore.js');
@@ -30,7 +30,7 @@ class Core {
 
         //NPC
         this.include('js/entities/npc/NpcCore.js'); //Ядро блоков
-        this.include('js/entities/npc/Snake.js'); //Ползающая хрень
+        this.include('js/entities/npc/RedHead.js'); //хрень
     }
 
     include(url) {

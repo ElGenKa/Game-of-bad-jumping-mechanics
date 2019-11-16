@@ -1,168 +1,162 @@
 class NpcCore {
-    constructor(x, y, type) {
-        this.x = x;
-        this.y = y;
-        this.type = type;
+    constructor(x, y, textures, w, h, addScore, hp, killer, viewDistance, name) {
+        //this.type = type;
         this.entity = null;
-        this.entityImage = null;
         this.speed = 1;
-        this.ID = engine.npcI;
-        this.viewDistance = 0;
-        this.killer = false;
-        this.jumpPower = 0;
-        this.hp = 1;
-        this.addScore = 0;
+        this.viewDistance = viewDistance;
+        this.killer = killer;
+        this.hp = hp;
+        this.addScore = addScore;
         this.status = 'idle';
+        this.textures = textures;
         this.collisions = {
             leftBox: false,
             topBox: false,
             rightBox: false,
-            bottomBox: false,
+            downBox: false,
         };
 
-        var w = 57;
-        var h = 32;
-        var image;
-        var name;
         var entity;
-        var entityImage;
-        switch (type) {
-            case 'snake':
-                image = engine.images['snakeLeft'];
-                name = 'snake';
-                this.viewDistance = 500;
-                this.killer = true;
-                this.addScore = 100;
-                break;
-        }
-
-        this.name = name;
-
-        if (engine.editor !== 1) {
-            entity = new Konva.Rect({
-                x: x,
-                y: y,
-                width: w,
-                height: h,
-                npcID: this.ID,
-                id: 'npc-' + this.ID,
-                idImage: 'npcImage-' + this.ID,
-                name: 'npc'
-            });
-        }
-
-        entityImage = new Konva.Image({
-            image: image,
+        var drag = false;
+        if (engine.editor === 1)
+            drag = true;
+        //console.log(textures.front);
+        entity = new Konva.Image({
+            image: textures.front,
             x: x,
             y: y,
-            cameraMoveX: engine.mapMovedX,
-            cameraMoveY: engine.mapMovedY,
             width: w,
             height: h,
-            nameAlt: name,
-            id: 'npcImage-' + this.ID,
-            idBox: 'npc-' + this.ID,
-            name: 'npcImage',
+            name: 'npcEnemy',
+            draggable: drag,
             tNpc: name,
         });
-
-        if (entity)
-            this.entity = entity;
-        this.entityImage = entityImage;
-
-        if (entity)
-            layerHits.add(entity);
-        layerHits.add(entityImage);
-
+        this.animator = new EntityAnimation(entity);
+        this.entity = entity;
+        //layerHits.add(entity);
         engine.npcI += 1;
+        engine.npcs.push(this);
+        return entity;
     }
 
     upd() {
         if (this.hp > 0) {
-            this.x = this.entity.attrs.x;
-            this.y = this.entity.attrs.y;
-            var playerDistance = player.x - this.x;
-            if (playerDistance < this.viewDistance && playerDistance > -this.viewDistance) {
-                if (playerDistance < this.viewDistance && playerDistance > 0) {
-                    this.moveRight(this.speed);
-                } else {
-                    this.moveLeft(this.speed);
-                }
-            }
-
             var thisNpc = this.entity.getClientRect();
             var thisThis = this;
-            thisThis.collisions.leftBox = thisThis.collisions.rightBox = thisThis.collisions.bottomBox = false;
+            thisThis.collisions.leftBox = thisThis.collisions.rightBox = thisThis.collisions.downBox = thisThis.collisions.topBox = false;
             layerHits.children.each(function (item) {
                     var itemR = item.getClientRect();
-                    if (item.attrs.name !== 'boxImage' && item.attrs.name !== 'player' && item.attrs.name !== 'npcImage') {
-                        if (itemR.x < thisNpc.x) {
-                            if (engine.haveIntersectionY(itemR, thisNpc)) {
-                                if (engine.haveIntersectionX(itemR, thisNpc)) {
-                                    if (thisNpc.y > itemR.y) {
-                                        thisThis.collisions.leftBox = true;
-                                    }
+                    if (item.attrs.name !== 'npcEnemy' && item.attrs.name !== 'player' && item.attrs.name !== 'decoration') {
+                        if (!engine.Intersection(itemR, thisNpc)) {
+                            itemR.centerX = itemR.x + itemR.width / 2;
+                            itemR.centerY = itemR.y + itemR.height / 2;
+                            thisNpc.centerX = thisNpc.x + thisNpc.width / 2;
+                            thisNpc.centerY = thisNpc.y + thisNpc.height / 2;
+
+                            //console.log(itemR.centerX + " " + thisNpc.centerX);
+                            var direc = 0;
+                            if (engine.haveIntersectionX(itemR, thisNpc)) {
+                                //console.log(itemR.centerX + " " + thisNpc.centerX);
+                                if (thisNpc.centerX > itemR.centerX) {
+                                    //console.log(itemR);
+                                    thisThis.collisions.leftBox = true;
+                                    /*direc = ((itemR.x + itemR.width) - playerR.x);
+                                    //player.moveX(direc, 'right');*/
+                                } else {
+                                    //console.log('2');
+                                    thisThis.collisions.rightBox = true;
+                                    /*direc = ((playerR.x + playerR.width) - itemR.x);
+                                    //player.moveX(direc, 'left');*/
                                 }
+
                             }
-                        }
-                        if (itemR.x > thisNpc.x) {
                             if (engine.haveIntersectionY(itemR, thisNpc)) {
-                                if (engine.haveIntersectionX(itemR, thisNpc)) {
-                                    if (thisNpc.y > itemR.y) {
-                                        thisThis.collisions.rightBox = true;
-                                    }
+                                if (thisNpc.centerY > itemR.centerY) {
+                                    //console.log('3');
+                                    thisThis.collisions.topBox = true;
+                                    /*direc = itemR.y - playerR.y;
+                                    //player.moveY(direc, 'down');*/
+                                } else {
+                                    //console.log('4');
+                                    thisThis.collisions.downBox = true;
+                                    /*direc = playerR.y - itemR.y;
+                                    //player.moveY(direc, 'top');*/
                                 }
-                            }
-                        }
-                        if (itemR.y > thisNpc.y) {
-                            if (engine.haveIntersectionY(itemR, thisNpc)) {
-                                if (engine.haveIntersectionX(itemR, thisNpc)) {
-                                    if (engine.haveIntersection(itemR, thisNpc)) {
-                                        if (itemR.y < thisNpc.y + (thisNpc.height - 1))
-                                            thisThis.moveTop(1);
-                                    }
-                                    thisThis.collisions.bottomBox = true;
-                                    thisThis.status = 'idle';
-                                    thisThis.jumpPower = 0;
-                                }
+
                             }
                         }
                     }
                 }
             );
-            if (!this.collisions.bottomBox) {
-                this.jumpPower += 0.25;
-                this.moveDown(this.jumpPower);
-            } else {
-                this.jumpPower = 0;
-                this.status = 'idle';
+
+            var x = this.entity.attrs.x;
+            var y = this.entity.attrs.y;
+            var playerDistanceX = player.entity.x() - x;
+            var playerDistanceY = player.entity.y() - y;
+            //console.log(playerDistanceX);
+            if (playerDistanceX < this.viewDistance && playerDistanceX > -this.viewDistance) {
+                if (playerDistanceX > 0) {
+                    //console.log('1');
+                    this.moveX(this.speed, 'right');
+                    this.animator.start(this.textures['right']);
+                } else {
+                    //console.log('2');
+                    this.moveX(-this.speed, 'left');
+                    this.animator.start(this.textures['left']);
+                }
+            }
+            if (playerDistanceY < this.viewDistance && playerDistanceY > -this.viewDistance) {
+                if (playerDistanceY < this.viewDistance && playerDistanceY > 0) {
+                    //console.log('3');
+                    this.moveY(this.speed, 'down');
+                    this.animator.start(this.textures['down']);
+                } else {
+                    //console.log('4');
+                    this.moveY(this.speed, 'top');
+                    this.animator.start(this.textures['top']);
+                }
+            }
+            else{
+                //console.log('5');
+                this.animator.stop();
+                this.entity.image(this.textures['front']);
             }
         }
     }
 
-    moveLeft() {
-        if (!this.collisions.leftBox) {
-            this.entity.x(this.x - this.speed);
-            this.entityImage.x(this.x - this.speed);
+    moveX(speed, direction) {
+        //console.log(this.collisions);
+        var newX;
+        if (direction === 'left') {
+            if (!this.collisions.leftBox) {
+                newX = this.entity.x()-this.speed;
+                //console.log(newX);
+                this.entity.x( newX );
+                //engine.cameraMoveX(-this.speed);
+            }
+        } else {
+            if (!this.collisions.rightBox) {
+                newX = this.entity.x()+this.speed;
+                //console.log(newX);
+                this.entity.x( newX )
+            }
         }
-        this.entityImage.image(engine.images['snakeLeft']);
     }
 
-    moveRight() {
-        if (!this.collisions.rightBox) {
-            this.entity.x(this.x + this.speed);
-            this.entityImage.x(this.x + this.speed);
+    moveY(speed, direction) {
+        var newY;
+        if (direction === 'top') {
+            if (!this.collisions.topBox) {
+                //engine.cameraMoveY(-this.speed);
+                newY = this.entity.y()-this.speed;
+                this.entity.y( newY )
+            }
+        } else {
+            if (!this.collisions.downBox) {
+                //engine.cameraMoveY(this.speed);
+                newY = this.entity.y()+this.speed;
+                this.entity.y( newY )
+            }
         }
-        this.entityImage.image(engine.images['snakeRight']);
-    }
-
-    moveDown(grav) {
-        this.entity.y(this.y + grav);
-        this.entityImage.y(this.y + grav);
-    }
-
-    moveTop(grav) {
-        this.entity.y(this.y - grav);
-        this.entityImage.y(this.y - grav);
     }
 }
