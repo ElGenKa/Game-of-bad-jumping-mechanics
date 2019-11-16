@@ -13,6 +13,44 @@ engine = {
     interface: null,
     ini: function () {
         engine.loadImages(sources);
+
+        layerHits = new Konva.Layer();
+        layerInterface = new Konva.Layer();
+        layerFon = new Konva.Layer();
+        layerFon.add(
+            new Konva.Rect({
+                width: 1200,
+                height: 670,
+                fill: 'gray'
+            })
+        );
+        //layerFon.fill('gray');
+        bulletProto = new Konva.Rect({
+            x: -1000,
+            y: -1000,
+            fill: 'red',
+            name: 'bullet'
+        });
+        bulletClassProto = new Bullet();
+        //engine.ini();
+
+        //создаём контейнер
+        stage = new Konva.Stage({
+            container: 'game',  // индификатор div контейнера
+            width: 1128,
+            height: 620
+        });
+
+        //Отлавливаем нажатия клавишь
+        $(document).keyup(function (item) {
+            var keyPressed = item.which;
+            player.keyHandler(keyPressed, 'up');
+        });
+        $(document).keydown(function (item) {
+            var keyPressed = item.which;
+            player.keyHandler(keyPressed, 'down');
+        });
+
         engine.interface = new Interface();
         player = new Player();
         player.entity = new Konva.Image({
@@ -81,6 +119,22 @@ engine = {
             localStorage.setItem('selectMap', $(item.currentTarget).data('map'));
             location.reload();
         });
+
+        // далее инициализируем карту
+        initMap(engine.selectMap);
+
+        layerHits.add(player.entity);
+        layerInterface.add(player.hpBar.down);
+        layerInterface.add(player.hpBar.up);
+        layerHits.add(player.entityHitBox);
+        layerHits.add(player.entityHitBullets);
+
+        //var interface = new Interface();
+
+        // добавляем слои
+        stage.add(layerFon);
+        stage.add(layerHits);
+        stage.add(layerInterface);
     },
     render: function () {
         layerHits.clear();

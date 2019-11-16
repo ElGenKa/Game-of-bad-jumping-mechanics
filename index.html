@@ -27,7 +27,7 @@
             <div class="card">
                 <div class="card-body">
                     <div id="game" class="w-100">
-
+                        Загрузка...
                     </div>
                 </div>
             </div>
@@ -45,69 +45,18 @@
 </body>
 </html>
 <script>
-    // Инициализируем двигло
-    /*if (window.Worker) {
-        var myWorker = new Worker("./js/core/BulletWorker.js");
-        //myWorker.work(engine.bullets);
-    }*/
-    var layerHits = new Konva.Layer();
-    var layerInterface = new Konva.Layer();
-    var layerFon = new Konva.Layer();
-    layerFon.add(
-        new Konva.Rect({
-            width: 1200,
-            height: 670,
-            fill: 'gray'
-        })
-    );
-    //layerFon.fill('gray');
-    var bulletProto = new Konva.Rect({
-        x: -1000,
-        y: -1000,
-        fill: 'red',
-        name: 'bullet'
+    var layerHits;
+    var layerInterface;
+    var layerFon;
+    var bulletProto;
+    var bulletClassProto;
+    var stage;
+    $(window).ready(function () {
+        setTimeout(function () {
+            engine.ini();
+            var gameTimer = setInterval(function () {
+                engine.render();
+            }, 33);
+        }, 2000);
     });
-    var bulletClassProto = new Bullet();
-    engine.ini();
-
-    //создаём контейнер
-    var stage = new Konva.Stage({
-        container: 'game',  // индификатор div контейнера
-        width: 1128,
-        height: 620
-    });
-
-    // далее создаём слой
-
-
-    // далее инициализируем карту
-    initMap(engine.selectMap);
-
-    layerHits.add(player.entity);
-    layerInterface.add(player.hpBar.down);
-    layerInterface.add(player.hpBar.up);
-    layerHits.add(player.entityHitBox);
-    layerHits.add(player.entityHitBullets);
-
-    //var interface = new Interface();
-
-    // добавляем слои
-    stage.add(layerFon);
-    stage.add(layerHits);
-    stage.add(layerInterface);
-
-    //Отлавливаем нажатия клавишь
-    $(document).keyup(function (item) {
-        var keyPressed = item.which;
-        player.keyHandler(keyPressed, 'up');
-    });
-    $(document).keydown(function (item) {
-        var keyPressed = item.which;
-        player.keyHandler(keyPressed, 'down');
-    });
-
-    //Запускаем цикл игры
-    var gameTimer = setInterval(function () {
-        engine.render();
-    }, 33);
 </script>
