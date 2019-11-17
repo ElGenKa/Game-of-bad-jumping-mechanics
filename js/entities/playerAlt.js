@@ -20,13 +20,11 @@ class Player {
                     if (itemR.x > 500 && itemR.x < 700) {
                         if (itemR.y > 200 && itemR.y < 400) {
                             if (!engine.Intersection(itemR, playerR)) {
-                                //if (item.attrs.name === 'bullet') {
                                 if (!item.attrs.classId.player) {
                                     item.attrs.classId.live = false;
                                     item.attrs.classId.entity.destroy();
                                     player.hp -= item.attrs.classId.bullet.damage;
                                 }
-                                //}
                             }
                         }
                     }
@@ -68,8 +66,35 @@ class Player {
                         y: 0,
                     }
                 };
-                //var textBoxes = [];
                 mapChildrens.forEach(function (item) {
+                        if (item.attrs.t === 'BlockTeleport') {
+                            var itemR = item.getClientRect();
+                            if (!engine.Intersection(itemR, playerR)) {
+                                //console.log('1');
+                                if (engine.selectMap === maps.length) {
+                                    engine.selectMap = 0;
+                                } else {
+                                    engine.selectMap += 1;
+                                }
+                                engine.ini();
+                            }
+                        }
+                        if (item.attrs.name === 'item') {
+                            var itemR = item.getClientRect();
+                            if (!engine.Intersection(itemR, playerR)) {
+                                switch (item.attrs.subName) {
+                                    case 'score':
+                                        player.inventory.addScore(item.attrs.subParam);
+                                        break;
+                                    case 'heart':
+                                        player.hp += item.attrs.subParam;
+                                        if (player.hp > player.maxHp)
+                                            player.hp = player.maxHp;
+                                        break;
+                                }
+                                item.destroy();
+                            }
+                        }
                         if (item.attrs.name === 'box') {
                             var itemR = item.getClientRect();
                             if (itemR.x > 200 && itemR.x < 600 + itemR.width) {
@@ -107,15 +132,14 @@ class Player {
                                         faceItem.bottom.x = itemR.x + itemR.width / 2;
                                         faceItem.bottom.y = itemR.y + itemR.height;
 
-                                        var disTop = Math.sqrt(Math.pow(playerR.centerX - faceItem.top.x,2) + Math.pow(playerR.centerY - faceItem.top.y,2));
-                                        var disBot = Math.sqrt(Math.pow(playerR.centerX - faceItem.bottom.x,2) + Math.pow(playerR.centerY - faceItem.bottom.y,2));
-                                        var disLeft = Math.sqrt(Math.pow(playerR.centerX - faceItem.left.x,2) + Math.pow(playerR.centerY - faceItem.left.y,2));
-                                        var disRight = Math.sqrt(Math.pow(playerR.centerX - faceItem.right.x,2) + Math.pow(playerR.centerY - faceItem.right.y,2));
+                                        var disTop = Math.sqrt(Math.pow(playerR.centerX - faceItem.top.x, 2) + Math.pow(playerR.centerY - faceItem.top.y, 2));
+                                        var disBot = Math.sqrt(Math.pow(playerR.centerX - faceItem.bottom.x, 2) + Math.pow(playerR.centerY - faceItem.bottom.y, 2));
+                                        var disLeft = Math.sqrt(Math.pow(playerR.centerX - faceItem.left.x, 2) + Math.pow(playerR.centerY - faceItem.left.y, 2));
+                                        var disRight = Math.sqrt(Math.pow(playerR.centerX - faceItem.right.x, 2) + Math.pow(playerR.centerY - faceItem.right.y, 2));
 
                                         if (itemR.centerX < playerR.centerX && (disRight < disTop && disRight < disBot)) {
                                             faceItem.x = itemR.x + itemR.width;
                                             faceItem.y = itemR.y + itemR.height;
-                                            console.log(1);
                                             if (facePlayer.left.x < faceItem.x) { //Если грань игрока в за гранью блока
                                                 if (Math.abs(facePlayer.left.y - faceItem.y) < itemR.height) {
                                                     player.collisions.leftBox = true;
@@ -126,7 +150,6 @@ class Player {
                                         } else if (itemR.centerX > playerR.centerX && (disLeft < disTop && disLeft < disBot)) { //Если левее
                                             faceItem.x = itemR.x;
                                             faceItem.y = itemR.y + itemR.height;
-                                            console.log(2);
                                             if (facePlayer.right.x > faceItem.x) { //Если грань игрока в за гранью блока
                                                 if (Math.abs(facePlayer.right.y - faceItem.y) < itemR.height) {
                                                     player.collisions.rightBox = true;
@@ -137,7 +160,6 @@ class Player {
                                         } else if (playerR.centerY < itemR.centerY && (disTop < disLeft || disTop < disRight)) { //Ниже
                                             faceItem.x = itemR.x + itemR.width / 2;
                                             faceItem.y = itemR.y;
-                                            console.log(3);
                                             if (facePlayer.bottom.y > faceItem.y) { //Если грань игрока в за гранью блока
                                                 if (Math.abs(facePlayer.bottom.x - faceItem.x) < itemR.width) {
                                                     player.collisions.downBox = true;
@@ -147,7 +169,6 @@ class Player {
                                         } else if (playerR.centerY > itemR.centerY && (disBot < disLeft || disBot < disRight)) { //выше
                                             faceItem.x = itemR.x + itemR.width / 2;
                                             faceItem.y = itemR.y + itemR.height;
-                                            console.log(3);
                                             if (facePlayer.top.y < faceItem.y) { //Если грань игрока в за гранью блока
                                                 if (Math.abs(facePlayer.top.x - faceItem.x) < itemR.width) {
                                                     player.collisions.topBox = true;
@@ -165,8 +186,6 @@ class Player {
                         }
                     }
                 );
-                /*console.clear();
-                console.log(textBoxes);*/
             },
             leftBox: false,
             topBox: false,
@@ -254,12 +273,10 @@ class Player {
             this.animator.stop();
             this.entity.image(engine.images['playerFront'])
         }
-
         if (this.keys.space) {
             //console.log(this.weapon);
             this.weapon.fire(this.entity.getClientRect(), layerHits.getStage().getPointerPosition(), true);
         }
-
         if (this.keys.r) {
             this.weapon.reload();
         }

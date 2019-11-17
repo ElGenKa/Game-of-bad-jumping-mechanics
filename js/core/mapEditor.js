@@ -28,19 +28,17 @@ engine = {
 
     render: function () {
         layerHits.clear();
-        //if(this.selected)
-            //this.selected.strokeEnabled(true);
         if (this.keys.a) {
-            this.cameraMoveX(-2);
+            this.cameraMoveX(-5);
         }
         if (this.keys.s) {
-            this.cameraMoveY(2);
+            this.cameraMoveY(5);
         }
         if (this.keys.d) {
-            this.cameraMoveX(2);
+            this.cameraMoveX(5);
         }
         if (this.keys.w) {
-            this.cameraMoveY(-2);
+            this.cameraMoveY(-5);
         }
         this.renderFrame += 1;
         layerHits.draw();
@@ -69,24 +67,20 @@ engine = {
         var assetDir = 'assets/';
         engine.images = {};
         for (var src in sources) {
-            //console.log(sources[src].count);
             if (sources[src].count > 0) {
                 engine.images[src] = {count: sources[src].count};
                 for(var i = 0; i<sources.count; i++){
-                    //console.log(sources);
                     engine.images[src].image[i] = new Image();
                     engine.images[src].image[i].src = assetDir + sources[src].image[i];
                 }
             } else {
-                //console.log(sources[src]);
                 engine.images[src] = new Image();
                 engine.images[src].src = assetDir + sources[src];
             }
         }
     },
 
-    keyDown: function (keyPressed) { //65 83 68 87
-        //console.log(keyPressed);
+    keyDown: function (keyPressed) {
         switch (keyPressed) {
             case 65: //A
                 engine.keys.a = true;
@@ -133,7 +127,6 @@ engine = {
             }else{
                 contentTemp.push({x: item.x(), y: item.y(), t: item.attrs.t, tNpc: item.attrs.tNpc});
             }
-            //contentTemp.push({x: item.x(), y: item.y(), t: item.attrs.t, tNpc: item.attrs.tNpc});
         });
         var content = JSON.stringify(contentTemp);
         var fileName = 'map.txt';
@@ -153,6 +146,7 @@ engine = {
 
     selected: null,
     acceptBlock(){
+        console.log(engine.selected);
         var entity = eval("new " + $('#object_t').val() + "("+engine.selected.x()+","+engine.selected.y()+")");
         engine.selected.destroy();
         var mapGroup = layerHits.find('.mapGroup')[0];
@@ -161,10 +155,7 @@ engine = {
     },
 
     deleteBlock(){
-        //var entity = eval("new " + $('#object_t').val() + "("+engine.selected.x()+","+engine.selected.y()+")");
         engine.selected.destroy();
-        //layerHits.add(entity);
-        //console.log(entity);
     }
 
 };

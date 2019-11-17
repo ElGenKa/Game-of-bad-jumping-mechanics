@@ -125,13 +125,17 @@ class NpcCore {
             if (this.live) {
                 this.live = false;
                 this.deadTimer = setInterval(function (npc) {
-                    var newOp = npc.entity.opacity() - 0.1;
+                    var newOp = npc.entity.opacity() - 0.2;
                     npc.entity.opacity(newOp);
                     if (newOp <= 0) {
+                        var score = new ItemScore(npc.entity.x()+10,npc.entity.y()+10,npc.addScore);
+                        if(Math.floor(Math.random() * Math.floor(10)) < 4)
+                            var heart = new ItemHeart(npc.entity.x(),npc.entity.y(),10);
+
                         clearInterval(npc.deadTimer);
                         npc.entity.destroy();
                     }
-                }, 100, this)
+                }, 50, this)
             }
         }
     }

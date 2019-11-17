@@ -10,194 +10,183 @@ engine = {
     renderFrame: 0,
     npcs: [],
     bullets: [],
+    isInit: false,
     interface: null,
     ini: function () {
-        engine.loadImages(sources);
-
-        layerHits = new Konva.Layer();
-        layerInterface = new Konva.Layer();
-        layerFon = new Konva.Layer();
-        layerFon.add(
-            new Konva.Rect({
-                width: 1200,
-                height: 670,
-                fill: 'gray'
-            })
-        );
-        //layerFon.fill('gray');
-        bulletProto = new Konva.Rect({
-            x: -1000,
-            y: -1000,
-            fill: 'red',
-            name: 'bullet'
-        });
-        bulletClassProto = new Bullet();
-        //engine.ini();
-
-        //создаём контейнер
-        stage = new Konva.Stage({
-            container: 'game',  // индификатор div контейнера
-            width: 1128,
-            height: 620
-        });
-
-        //Отлавливаем нажатия клавишь
-        $(document).keyup(function (item) {
-            var keyPressed = item.which;
-            player.keyHandler(keyPressed, 'up');
-        });
-        $(document).keydown(function (item) {
-            var keyPressed = item.which;
-            player.keyHandler(keyPressed, 'down');
-        });
-
-        engine.interface = new Interface();
-        player = new Player();
-
         var playerSize = {w: 66, h: 92};
-        var groupPlayer = new Konva.Group({
-            x: 1128 / 2 - playerSize.w / 2,
-            y: 620 / 2 - playerSize.h / 2,
-            name: 'player',
-            width: playerSize.w,
-            height: playerSize.h
-        });
-
-        player.entity = new Konva.Image({
-            image: engine.images['playerLeft'],
-            x: 0,
-            y: 0,
-            name: 'player',
-            width: 66,
-            height: 92,
-        });
-        groupPlayer.add(player.entity);
-        player.entityHitBox = new Konva.Rect({
-            x: 16,
-            y: playerSize.h - 35,
-            name: 'player',
-            subName: 'hitBox',
-            height: 35,
-            width: 35,
-            fill: 'rgba(255,244,0,0.1)'
-        });
-        groupPlayer.add(player.entityHitBox);
-        player.entityHitBullets = new Konva.Rect({
-            x: (playerSize.w - 50) / 2,
-            y: (playerSize.h - 50) / 2 - 4,
-            name: 'player',
-            subName: 'bulletBox',
-            height: 75,
-            width: 50,
-            fill: 'rgba(255,0,172,0.1)'
-        });
-        groupPlayer.add(player.entityHitBullets);
-
-        var hitBox;
-        //HitBox
-        //left
-        hitBox = new Konva.Rect({
-            x: player.entityHitBox.x(),
-            y: player.entityHitBox.y(),
-            width: 3,
-            height: player.entityHitBox.height(),
-            name: 'HitBoxLeft',
-            fill: 'hellow'
-        });
-        groupPlayer.add(hitBox);
-        //Right
-        hitBox = new Konva.Rect({
-            x: player.entityHitBox.x() + player.entityHitBox.width() - 3,
-            y: player.entityHitBox.y(),
-            width: 3,
-            height: player.entityHitBox.height(),
-            name: 'HitBoxRight',
-            fill: 'hellow'
-        });
-        groupPlayer.add(hitBox);
-        //Top
-        hitBox = new Konva.Rect({
-            x: player.entityHitBox.x(),
-            y: player.entityHitBox.y(),
-            width: player.entityHitBox.width(),
-            height: 3,
-            name: 'HitBoxTop',
-            fill: 'hellow'
-        });
-        groupPlayer.add(hitBox);
-        //Down
-        hitBox = new Konva.Rect({
-            x: player.entityHitBox.x(),
-            y: player.entityHitBox.y() + player.entityHitBox.height()-3,
-            width: player.entityHitBox.width(),
-            height: 3,
-            name: 'HitBoxTop',
-            fill: 'hellow'
-        });
-        groupPlayer.add(hitBox);
-
-        player.animator = new EntityAnimation(player.entity);
-        player.inventory = new Inventory();
-        player.weapon = new Weapon();
-        player.hpBar = {
-            down: new Konva.Image({
-                image: engine.images['hpBarDown'],
-                width: 100,
-                height: 10,
-                x: 1128 / 2 - 100 + 49,
-                y: 620 / 2 - 70,
-                name: 'playerBar',
-            }),
-            up: new Konva.Rect({
-                fill: 'green',
-                width: 98,
-                height: 8,
-                x: 1128 / 2 - 100 + 49 + 1,
-                y: 620 / 2 - 70 + 1,
-                name: 'playerBar',
-            })
-        };
-
-        var bullet;
-        for (i = 0; i < player.weapon.maxBullets; i++) {
-            bullet = new Konva.Image({
-                x: 10,
-                y: 10 + i * 15,
-                name: 'bullet',
-                image: engine.images['playerBulletEmpty']
+        var groupPlayer;
+        if (!this.isInit) {
+            engine.loadImages(sources);
+            layerHits = new Konva.Layer();
+            layerInterface = new Konva.Layer();
+            layerFon = new Konva.Layer();
+            layerFon.add(
+                new Konva.Rect({
+                    width: 1200,
+                    height: 670,
+                    fill: 'gray'
+                })
+            );
+            bulletProto = new Konva.Rect({
+                x: -1000,
+                y: -1000,
+                fill: 'red',
+                name: 'bullet'
             });
-            layerInterface.add(bullet);
-        }
+            bulletClassProto = new Bullet();
 
-        var selMap = localStorage.getItem('selectMap');
-        if (selMap) {
-            engine.selectMap = selMap;
-        } else
+            //создаём контейнер
+            stage = new Konva.Stage({
+                container: 'game',  // индификатор div контейнера
+                width: 1128,
+                height: 620
+            });
+
+            //Отлавливаем нажатия клавишь
+            $(document).keyup(function (item) {
+                var keyPressed = item.which;
+                player.keyHandler(keyPressed, 'up');
+            });
+            $(document).keydown(function (item) {
+                var keyPressed = item.which;
+                player.keyHandler(keyPressed, 'down');
+            });
+
+            engine.interface = new Interface();
+            player = new Player();
+
+            groupPlayer = new Konva.Group({
+                x: 1128 / 2 - playerSize.w / 2,
+                y: 620 / 2 - playerSize.h / 2,
+                name: 'player',
+                width: playerSize.w,
+                height: playerSize.h
+            });
+
+            player.entity = new Konva.Image({
+                image: engine.images['playerLeft'],
+                x: 0,
+                y: 0,
+                name: 'player',
+                width: 66,
+                height: 92,
+            });
+            groupPlayer.add(player.entity);
+            player.entityHitBox = new Konva.Rect({
+                x: 16,
+                y: playerSize.h - 35,
+                name: 'player',
+                subName: 'hitBox',
+                height: 35,
+                width: 35
+            });
+            groupPlayer.add(player.entityHitBox);
+            player.entityHitBullets = new Konva.Rect({
+                x: (playerSize.w - 50) / 2,
+                y: (playerSize.h - 50) / 2 - 4,
+                name: 'player',
+                subName: 'bulletBox',
+                height: 75,
+                width: 50
+            });
+            groupPlayer.add(player.entityHitBullets);
+
+            player.animator = new EntityAnimation(player.entity);
+            player.inventory = new Inventory();
+            player.weapon = new Weapon();
+            player.hpBar = {
+                down: new Konva.Image({
+                    image: engine.images['hpBarDown'],
+                    width: 100,
+                    height: 10,
+                    x: 1128 / 2 - 100 + 49,
+                    y: 620 / 2 - 70,
+                    name: 'playerBar',
+                }),
+                up: new Konva.Rect({
+                    fill: 'green',
+                    width: 98,
+                    height: 8,
+                    x: 1128 / 2 - 100 + 49 + 1,
+                    y: 620 / 2 - 70 + 1,
+                    name: 'playerBar',
+                })
+            };
+
+            var bullet;
+            for (i = 0; i < player.weapon.maxBullets; i++) {
+                bullet = new Konva.Image({
+                    x: 10,
+                    y: 10 + i * 15,
+                    name: 'bullet',
+                    image: engine.images['playerBulletEmpty']
+                });
+                layerInterface.add(bullet);
+            }
+
             engine.selectMap = 0;
 
-        $('.mapSelector').on('click', function (item) {
-            localStorage.setItem('selectMap', $(item.currentTarget).data('map'));
-            location.reload();
-        });
+            $('.mapSelector').on('click', function (item) {
+                localStorage.setItem('selectMap', $(item.currentTarget).data('map'));
+                location.reload();
+            });
 
-        // далее инициализируем карту
-        initMap(engine.selectMap);
+            // далее инициализируем карту
+            initMap(engine.selectMap);
 
-        layerHits.add(groupPlayer);
-        /*layerHits.add(player.entity);
-        layerHits.add(player.entityHitBox);
-        layerHits.add(player.entityHitBullets);*/
-        layerInterface.add(player.hpBar.down);
-        layerInterface.add(player.hpBar.up);
+            layerHits.add(groupPlayer);
+            layerInterface.add(player.hpBar.down);
+            layerInterface.add(player.hpBar.up);
 
+            // добавляем слои
+            stage.add(layerFon);
+            stage.add(layerHits);
+            stage.add(layerInterface);
+            this.isInit = true;
+        } else {
+            layerHits.destroy();
+            layerHits = new Konva.Layer();
+            groupPlayer = new Konva.Group({
+                x: 1128 / 2 - playerSize.w / 2,
+                y: 620 / 2 - playerSize.h / 2,
+                name: 'player',
+                width: playerSize.w,
+                height: playerSize.h
+            });
+            stage.add(layerHits);
 
-        //var interface = new Interface();
-
-        // добавляем слои
-        stage.add(layerFon);
-        stage.add(layerHits);
-        stage.add(layerInterface);
-
+            player.entity = new Konva.Image({
+                image: engine.images['playerLeft'],
+                x: 0,
+                y: 0,
+                name: 'player',
+                width: 66,
+                height: 92,
+            });
+            groupPlayer.add(player.entity);
+            player.entityHitBox = new Konva.Rect({
+                x: 16,
+                y: playerSize.h - 35,
+                name: 'player',
+                subName: 'hitBox',
+                height: 35,
+                width: 35
+            });
+            groupPlayer.add(player.entityHitBox);
+            player.entityHitBullets = new Konva.Rect({
+                x: (playerSize.w - 50) / 2,
+                y: (playerSize.h - 50) / 2 - 4,
+                name: 'player',
+                subName: 'bulletBox',
+                height: 75,
+                width: 50
+            });
+            player.animator = new EntityAnimation(player.entity);
+            groupPlayer.add(player.entityHitBullets);
+            layerHits.add(groupPlayer);
+            console.log(engine.selectMap);
+            initMap(engine.selectMap);
+        }
         playerData = layerHits.find('.player')[0];
         playerPosition = {
             x: playerData.x(),
@@ -208,17 +197,16 @@ engine = {
             hitBox: {},
         };
         playerData.children.each(function (item) {
-            if(item.attrs.subName === 'bulletBox'){
+            if (item.attrs.subName === 'bulletBox') {
                 playerPosition.hitBoxBullet = item.getClientRect();
             }
-            if(item.attrs.subName === 'hitBox') {
+            if (item.attrs.subName === 'hitBox') {
                 playerPosition.hitBox = item.getClientRect();
             }
         });
     },
     render: function () {
         layerHits.clear();
-
         mapChildrensBullet = layerHits.find('.bullet');
         mapChildrensAll = layerHits.children;
         if (this.renderFrame % 3 !== 1) {
@@ -227,14 +215,22 @@ engine = {
             mapChildrensTemp = layerHits.find('.mapGroup')[0].children;
             mapChildrensTemp.each(function (item) {
                 var itemR = item.getClientRect();
-                if(itemR.x > 0 && itemR.x < 1300 && itemR.y < 700 && itemR.y > 0) {
+                if (itemR.x > 0 && itemR.x < 1300 && itemR.y < 700 && itemR.y > 0) {
                     mapChildrens[i] = item;
-                    if(mapChildrens[i].attrs.upd)
+                    if (mapChildrens[i].attrs.upd)
                         mapChildrens[i].attrs.upd(mapChildrens[i].getClientRect());
                     //item.attrs.upd();
                     i++;
                 }
             });
+            layerHits.find('.item').each(function (item) {
+                var itemR = item.getClientRect();
+                if (itemR.x > 0 && itemR.x < 1300 && itemR.y < 700 && itemR.y > 0) {
+                    mapChildrens[i] = item;
+                    i++;
+                }
+            });
+
             //mapChildrens
 
             player.collisions.checkCollision();
@@ -305,7 +301,6 @@ engine = {
         var assetDir = 'assets/';
         engine.images = {};
         for (var src in sources) {
-            //console.log(sources[src].count);
             if (sources[src].count > 0) {
                 engine.images[src] = {count: sources[src].count, image: []};
                 for (var i = 0; i < sources[src].count; i++) {
@@ -313,9 +308,7 @@ engine = {
                     engine.images[src].image[i] = new Image();
                     engine.images[src].image[i].src = assetDir + sources[src].image[i];
                 }
-                //console.log(engine.images[src]);
             } else {
-                //console.log(sources[src]);
                 engine.images[src] = new Image();
                 engine.images[src].src = assetDir + sources[src];
             }

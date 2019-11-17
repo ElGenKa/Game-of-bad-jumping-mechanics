@@ -16,12 +16,12 @@ class BoxCore {
             x: this.x,
             y: this.y,
             draggable: drag,
+            dragDistance: 5,
             t: this.name,
             name: 'box',
             width: this.w,
             height: this.h
         });
-
         var entity;
         if(this.image.count === 1) {
             entity = new Konva.Image({
@@ -46,54 +46,6 @@ class BoxCore {
                 group.add(entity);
             }
         }
-
-        /*var hitBox;
-        //HitBox
-        //left
-        hitBox = new Konva.Rect({
-            x: 0,
-            y: 0,
-            width: 3,
-            height: this.h,
-            name: 'HitBoxLeft',
-            id: 'hitBox',
-            fill: 'hellow'
-        });
-        group.add(hitBox);
-        //Right
-        hitBox = new Konva.Rect({
-            x: this.w - 3,
-            y: 0,
-            width: 3,
-            height: this.h,
-            name: 'HitBoxRight',
-            id: 'hitBox',
-            fill: 'hellow'
-        });
-        group.add(hitBox);
-        //Top
-        hitBox = new Konva.Rect({
-            x: 0,
-            y: 0,
-            width: this.w,
-            height: 3,
-            name: 'HitBoxTop',
-            id: 'hitBox',
-            fill: 'hellow'
-        });
-        group.add(hitBox);
-        //Down
-        hitBox = new Konva.Rect({
-            x: 0,
-            y: this.h-3,
-            width: this.w,
-            height: 3,
-            name: 'HitBoxDown',
-            id: 'hitBox',
-            fill: 'hellow'
-        });
-        group.add(hitBox);*/
-
         group.attrs.upd = function (itemSender) {
             mapChildrensBullet.each(function (item) {
                 var itemR = item.getClientRect();
@@ -103,7 +55,6 @@ class BoxCore {
                 }
             });
         };
-        //group.attrs.upd();
         return group;
     }
 }

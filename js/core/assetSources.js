@@ -4,6 +4,7 @@ var sources = {
     playerBulletEmpty: 'BulletEmpty.png',
     hpBarDown: 'hpBarDown.png',
     heart: 'download/HUD/hud_heartFull.png',
+    nextLevel: 'download/Tiles/window.png',
     heartZero: 'download/HUD/hud_heartEmpty.png',
     grass: 'download/Tiles/castleCenter.png',
     grassLeft: 'download/Tiles/castleCenter.png',
@@ -12,12 +13,7 @@ var sources = {
     sandMid: 'download/Tiles/castleCenter.png',
     DecBush: 'download/Items/bush.png',
     DecRock: 'download/Items/rock.png',
-    /*playerLeft: 'download/Player/playerLeft.png',
-    playerRight: 'download/Player/playerRight.png',
-    playerJumpLeft: 'download/Player/playerJumpLeft.png',
-    playerHurtLeft: 'download/Player/playerHurtLeft.png',
-    playerJumpRight: 'download/Player/playerJumpRight.png',
-    playerHurtRight: 'download/Player/playerHurtRight.png',*/
+    ScoreIco: 'score.png',
     playerAnimateLeft: {
         count: 10,
         image: [

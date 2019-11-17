@@ -18,13 +18,14 @@
     <script src='js/entities/decoration/DecRock.js'></script>
     <script src='js/entities/blocks/BoxCore.js'></script>
     <script src='js/entities/blocks/PlatformSmall.js'></script>
+    <script src='js/entities/blocks/BlockTeleport.js'></script>
     <script src='js/entities/blocks/PlatformMedium.js'></script>
     <script src='js/entities/blocks/PlatformExtraBig.js'></script>
     <script src='js/entities/blocks/PlatformBig.js'></script>
     <script src='js/entities/blocks/PlatformSandSmall.js'></script>
     <script src='js/entities/blocks/BoxMysterious.js'></script>
     <script src='js/entities/items/ItemCore.js'></script>
-    <script src='js/entities/items/Heart.js'></script>
+    <script src='js/entities/items/ItemHeart.js'></script>
     <script src='js/entities/npc/NpcCore.js'></script>
     <script src='js/entities/npc/RedHead.js'></script>
     <script src='js/entities/npc/BlueHead.js'></script>
@@ -78,9 +79,6 @@
         height: 620
     });
 
-    // далее создаём слой
-
-
     // далее инициализируем карту
     initMap(engine.selectMap);
 
@@ -101,6 +99,7 @@
         layerHits.draw();
     });
     layerHits.on('click', function (evt) { //Клик мышки
+        console.log(evt);
         engine.selected = evt.target.attrs.parent;
         if (evt.target.attrs.parent)
             $('#object_t').val(evt.target.attrs.parent.attrs.t);
