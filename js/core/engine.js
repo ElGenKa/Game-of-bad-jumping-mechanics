@@ -146,7 +146,6 @@ engine = {
         } else {
             if(engine.selectMap === 0){
                 $('.modal').show();
-                $('#mCount').html( player.inventory.score );
                 drawButtons();
             }else{
                 $('.modal').hide();

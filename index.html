@@ -90,6 +90,7 @@
         drawButtons();
     });
     function drawButtons() {
+        $('#mCount').html( player.inventory.score );
         var moneyHP = 100 * (100 * player.upgrades.hp.lvl * player.upgrades.hp.scailMoney);
         var moneySpeed = 100 * (100 * player.upgrades.speed.lvl * player.upgrades.speed.scailMoney);
         var moneyDamage = 100 + (100 * player.upgrades.damage.lvl * player.upgrades.damage.scailMoney);
