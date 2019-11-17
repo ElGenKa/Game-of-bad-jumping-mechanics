@@ -9,47 +9,157 @@ class Player {
         this.hp = 101;
         this.hpMax = 101;
         this.hpBar = null;
-        this.speed = 6;
+        this.speed = 10;
         this.deadTimer = null;
         this.collisions = {
             checkCollision: function () {
                 player.collisions.leftBox = player.collisions.topBox = player.collisions.rightBox = player.collisions.downBox = false;
-                layerHits.children.each(function (item) {
+                var playerR = playerPosition.hitBoxBullet;
+                mapChildrensBullet.each(function (item) {
                     var itemR = item.getClientRect();
-                    var playerR = player.entityHitBox.attrs;
-                    if(itemR.x > 400 && itemR.x < 800) {
-                        if(itemR.y > 200 && itemR.y < 500) {
-                            if (item.attrs.name !== 'decoration' && item.attrs.name !== 'player' && item.attrs.name !== 'npcEnemy') {
-                                if (!engine.Intersection(itemR, playerR)) {
-                                    itemR.centerX = itemR.x + itemR.width / 2;
-                                    itemR.centerY = itemR.y + itemR.height / 2;
-                                    playerR.centerX = playerR.x + playerR.width / 2;
-                                    playerR.centerY = playerR.y + playerR.height / 2;
-                                    var direc = 0;
-                                    if (engine.haveIntersectionX(itemR, playerR)) {
-                                        if (playerR.centerX > itemR.centerX) {
-                                            player.collisions.leftBox = true;
-                                        } else {
-                                            player.collisions.rightBox = true;
-                                        }
-
-                                    }
-                                    if (engine.haveIntersectionY(itemR, playerR)) {
-                                        if (playerR.centerY > itemR.centerY) {
-                                            player.collisions.topBox = true;
-                                        } else {
-                                            player.collisions.downBox = true;
-                                        }
-                                    }
+                    if (itemR.x > 500 && itemR.x < 700) {
+                        if (itemR.y > 200 && itemR.y < 400) {
+                            if (!engine.Intersection(itemR, playerR)) {
+                                //if (item.attrs.name === 'bullet') {
+                                if (!item.attrs.classId.player) {
+                                    item.attrs.classId.live = false;
+                                    item.attrs.classId.entity.destroy();
+                                    player.hp -= item.attrs.classId.bullet.damage;
                                 }
+                                //}
                             }
-                        }else{
-                            return true;
                         }
-                    }else{
-                        return true;
                     }
                 });
+                playerR = playerPosition.hitBox;
+                var facePlayer = {
+                    top: {
+                        x: 0,
+                        y: 0,
+                    },
+                    bottom: {
+                        x: 0,
+                        y: 0,
+                    },
+                    left: {
+                        x: 0,
+                        y: 0,
+                    },
+                    right: {
+                        x: 0,
+                        y: 0,
+                    }
+                };
+                var faceItem = {
+                    top: {
+                        x: 0,
+                        y: 0,
+                    },
+                    bottom: {
+                        x: 0,
+                        y: 0,
+                    },
+                    left: {
+                        x: 0,
+                        y: 0,
+                    },
+                    right: {
+                        x: 0,
+                        y: 0,
+                    }
+                };
+                //var textBoxes = [];
+                mapChildrens.forEach(function (item) {
+                        //var playerR = player.entityHitBox.attrs;
+                        if (item.attrs.name === 'box') {
+                            var itemR = item.getClientRect();
+                            if (itemR.x > 200 && itemR.x < 600 + itemR.width) {
+                                if (itemR.y > 200 && itemR.y < 400 + itemR.height) {
+                                    if (!engine.Intersection(itemR, playerR)) {
+                                        //Ищем центры объектов
+                                        itemR.centerX = itemR.x + itemR.width / 2;
+                                        itemR.centerY = itemR.y + itemR.height / 2;
+                                        playerR.centerX = playerR.x + playerR.width / 2;
+                                        playerR.centerY = playerR.y + playerR.height / 2;
+                                        playerR.distanceX = Math.abs(itemR.centerX - playerR.centerX);
+                                        playerR.distanceY = Math.abs(itemR.centerY - playerR.centerY);
+
+                                        facePlayer.left.x = playerR.x;
+                                        facePlayer.left.y = playerR.y + playerR.height / 2;
+
+                                        facePlayer.right.x = playerR.x + playerR.width;
+                                        facePlayer.right.y = playerR.y + playerR.height / 2;
+
+                                        facePlayer.bottom.x = playerR.x + playerR.width / 2;
+                                        facePlayer.bottom.y = playerR.y + playerR.height;
+
+                                        facePlayer.top.x = playerR.x + playerR.width / 2;
+                                        facePlayer.top.y = playerR.y;
+
+                                        faceItem.top.x = itemR.x + itemR.width / 2;
+                                        faceItem.top.y = itemR.y;
+
+                                        faceItem.bottom.x = itemR.x + itemR.width / 2;
+                                        faceItem.bottom.y = itemR.y + itemR.height;
+
+                                        //Если мы правее, то проверяем левую грань игрока
+                                        if (itemR.centerX < playerR.centerX) {
+                                            faceItem.x = itemR.x + itemR.width;
+                                            faceItem.y = itemR.y + itemR.height;
+                                            if (facePlayer.left.x < faceItem.x) { //Если грань игрока в за гранью блока
+                                                if (Math.abs(facePlayer.left.y - faceItem.y) < itemR.height) {
+                                                    player.collisions.leftBox = true;
+                                                    console.log(1);
+                                                    return true;
+                                                }
+                                            }
+
+                                        }
+                                        if (itemR.centerX > playerR.centerX) { //Если левее
+                                            faceItem.x = itemR.x;
+                                            faceItem.y = itemR.y + itemR.height;
+                                            if (facePlayer.right.x > faceItem.x) { //Если грань игрока в за гранью блока
+                                                if (Math.abs(facePlayer.right.y - faceItem.y) < itemR.height) {
+                                                    player.collisions.rightBox = true;
+                                                    console.log(2);
+                                                    return true;
+                                                }
+                                            }
+
+                                        }
+                                        if (playerR.centerY < itemR.centerY) { //Ниже
+                                            faceItem.x = itemR.x + itemR.width / 2;
+                                            faceItem.y = itemR.y;
+                                            if (facePlayer.bottom.y > faceItem.y) { //Если грань игрока в за гранью блока
+                                                if (Math.abs(facePlayer.bottom.x - faceItem.x) < itemR.width) {
+                                                    player.collisions.downBox = true;
+                                                    //console.log(3);
+                                                    return true;
+                                                }
+                                            }
+                                        }
+                                        if (playerR.centerY > itemR.centerY) { //выше
+                                            faceItem.x = itemR.x + itemR.width / 2;
+                                            faceItem.y = itemR.y + itemR.height;
+                                            if (facePlayer.top.y < faceItem.y) { //Если грань игрока в за гранью блока
+                                                if (Math.abs(facePlayer.top.x - faceItem.x) < itemR.width) {
+                                                    player.collisions.topBox = true;
+                                                    return true;
+                                                }
+                                            }
+                                        }
+                                    }
+                                } else {
+                                    return true;
+                                }
+                            } else {
+                                return true;
+                            }
+                        }
+                    }
+                );
+                /*console.clear();
+                console.log(textBoxes);*/
             },
             leftBox: false,
             topBox: false,
@@ -138,12 +248,12 @@ class Player {
             this.entity.image(engine.images['playerFront'])
         }
 
-        if(this.keys.space){
+        if (this.keys.space) {
             //console.log(this.weapon);
-            this.weapon.fire(this.entity.getClientRect(),layerHits.getStage().getPointerPosition(),true);
+            this.weapon.fire(this.entity.getClientRect(), layerHits.getStage().getPointerPosition(), true);
         }
 
-        if(this.keys.r){
+        if (this.keys.r) {
             this.weapon.reload();
         }
     }

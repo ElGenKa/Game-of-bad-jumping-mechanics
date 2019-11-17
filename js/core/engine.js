@@ -53,29 +53,89 @@ engine = {
 
         engine.interface = new Interface();
         player = new Player();
+
+        var playerSize = {w: 66, h: 92};
+        var groupPlayer = new Konva.Group({
+            x: 1128 / 2 - playerSize.w / 2,
+            y: 620 / 2 - playerSize.h / 2,
+            name: 'player',
+            width: playerSize.w,
+            height: playerSize.h
+        });
+
         player.entity = new Konva.Image({
             image: engine.images['playerLeft'],
-            x: 1128 / 2 - 33,
-            y: 620 / 2 - 46,
+            x: 0,
+            y: 0,
             name: 'player',
             width: 66,
-            height: 92
+            height: 92,
         });
+        groupPlayer.add(player.entity);
         player.entityHitBox = new Konva.Rect({
-            x: 1128 / 2 - 15,
-            y: 620 / 2 + 23,
+            x: 16,
+            y: playerSize.h - 23,
             name: 'player',
+            subName: 'hitBox',
             height: 23,
-            width: 33
+            width: 33,
+            fill: 'rgba(255,244,0,0.1)'
         });
+        groupPlayer.add(player.entityHitBox);
         player.entityHitBullets = new Konva.Rect({
-            x: 1128 / 2 - 33 + 8,
-            y: 620 / 2 - 28,
+            x: (playerSize.w - 50) / 2,
+            y: (playerSize.h - 50) / 2 - 4,
             name: 'player',
             subName: 'bulletBox',
             height: 75,
-            width: 50
+            width: 50,
+            fill: 'rgba(255,0,172,0.1)'
         });
+        groupPlayer.add(player.entityHitBullets);
+
+        var hitBox;
+        //HitBox
+        //left
+        hitBox = new Konva.Rect({
+            x: player.entityHitBox.x(),
+            y: player.entityHitBox.y(),
+            width: 3,
+            height: player.entityHitBox.height(),
+            name: 'HitBoxLeft',
+            fill: 'hellow'
+        });
+        groupPlayer.add(hitBox);
+        //Right
+        hitBox = new Konva.Rect({
+            x: player.entityHitBox.x() + player.entityHitBox.width() - 3,
+            y: player.entityHitBox.y(),
+            width: 3,
+            height: player.entityHitBox.height(),
+            name: 'HitBoxRight',
+            fill: 'hellow'
+        });
+        groupPlayer.add(hitBox);
+        //Top
+        hitBox = new Konva.Rect({
+            x: player.entityHitBox.x(),
+            y: player.entityHitBox.y(),
+            width: player.entityHitBox.width(),
+            height: 3,
+            name: 'HitBoxTop',
+            fill: 'hellow'
+        });
+        groupPlayer.add(hitBox);
+        //Down
+        hitBox = new Konva.Rect({
+            x: player.entityHitBox.x(),
+            y: player.entityHitBox.y() + player.entityHitBox.height()-3,
+            width: player.entityHitBox.width(),
+            height: 3,
+            name: 'HitBoxTop',
+            fill: 'hellow'
+        });
+        groupPlayer.add(hitBox);
+
         player.animator = new EntityAnimation(player.entity);
         player.inventory = new Inventory();
         player.weapon = new Weapon();
@@ -123,11 +183,13 @@ engine = {
         // далее инициализируем карту
         initMap(engine.selectMap);
 
-        layerHits.add(player.entity);
+        layerHits.add(groupPlayer);
+        /*layerHits.add(player.entity);
+        layerHits.add(player.entityHitBox);
+        layerHits.add(player.entityHitBullets);*/
         layerInterface.add(player.hpBar.down);
         layerInterface.add(player.hpBar.up);
-        layerHits.add(player.entityHitBox);
-        layerHits.add(player.entityHitBullets);
+
 
         //var interface = new Interface();
 
@@ -135,23 +197,58 @@ engine = {
         stage.add(layerFon);
         stage.add(layerHits);
         stage.add(layerInterface);
+
+        playerData = layerHits.find('.player')[0];
+        playerPosition = {
+            x: playerData.x(),
+            y: playerData.y(),
+            width: playerData.width(),
+            height: playerData.height(),
+            hitBoxBullet: {},
+            hitBox: {},
+        };
+        playerData.children.each(function (item) {
+            if(item.attrs.subName === 'bulletBox'){
+                playerPosition.hitBoxBullet = item.getClientRect();
+            }
+            if(item.attrs.subName === 'hitBox') {
+                playerPosition.hitBox = item.getClientRect();
+            }
+        });
     },
     render: function () {
         layerHits.clear();
-        player.collisions.checkCollision();
-        player.upd();
-        engine.interface.upd();
-        if (this.renderFrame % 2 !== 1) {
+
+        mapChildrensBullet = layerHits.find('.bullet');
+        mapChildrensAll = layerHits.children;
+        if (this.renderFrame % 3 !== 1) {
+            mapChildrens = [];
+            var i = 0;
+            mapChildrensTemp = layerHits.find('.mapGroup')[0].children;
+            mapChildrensTemp.each(function (item) {
+                var itemR = item.getClientRect();
+                if(itemR.x > 0 && itemR.x < 1300 && itemR.y < 700 && itemR.y > 0) {
+                    mapChildrens[i] = item;
+                    if(mapChildrens[i].attrs.upd)
+                        mapChildrens[i].attrs.upd(mapChildrens[i].getClientRect());
+                    //item.attrs.upd();
+                    i++;
+                }
+            });
+            //mapChildrens
+
+            player.collisions.checkCollision();
             if (engine.npcs) {
                 engine.npcs.forEach(function (item) {
                     item.upd();
                 });
             }
+            engine.bullets.forEach(function (item) {
+                item.upd();
+            });
         }
-
-        engine.bullets.forEach(function (item) {
-            item.upd();
-        });
+        player.upd();
+        engine.interface.upd();
 
         layerHits.draw();
         layerInterface.draw();
@@ -194,16 +291,21 @@ engine = {
     },
 
     moveAllEntities: function (x = 0, y = 0) {
+        var moveDis = {x: 0, y: 0};
         layerHits.children.each(function (item) {
-            if (item.attrs.name !== 'player' && item.attrs.name !== 'playerBar') {
-                if (x) {
-                    var newX = item.attrs.x + x;
+            //console.log(item);
+            if (item.attrs.name !== 'player') {
+                moveDis.x = x;
+                moveDis.y = y;
+                item.move(moveDis);
+                /*if (x) {
+                    var newX = item.x() + x;
                     item.x(newX);
                 }
                 if (y) {
-                    var newY = item.attrs.y + y;
+                    var newY = item.y() + y;
                     item.y(newY);
-                }
+                }*/
             }
         });
     },

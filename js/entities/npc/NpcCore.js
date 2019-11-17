@@ -44,31 +44,47 @@ class NpcCore {
         engine.npcs.push(this);
         return entity;
     }
+
     upd() {
         if (this.hp > 0) {
             var thisNpc = this.entity.getClientRect();
             var thisThis = this;
             thisThis.collisions.leftBox = thisThis.collisions.rightBox = thisThis.collisions.downBox = thisThis.collisions.topBox = false;
-            layerHits.children.each(function (item) {
+
+            mapChildrensBullet.each(function (item) {
+                if (item.attrs.classId.player) {
                     var itemR = item.getClientRect();
-                    if (item.attrs.name !== 'npcEnemy' && item.attrs.name !== 'player' && item.attrs.name !== 'decoration') {
-                        if (!engine.Intersection(itemR, thisNpc)) {
-                            itemR.centerX = itemR.x + itemR.width / 2;
-                            itemR.centerY = itemR.y + itemR.height / 2;
-                            thisNpc.centerX = thisNpc.x + thisNpc.width / 2;
-                            thisNpc.centerY = thisNpc.y + thisNpc.height / 2;
-                            if (engine.haveIntersectionX(itemR, thisNpc)) {
-                                if (thisNpc.centerX > itemR.centerX) {
-                                    thisThis.collisions.leftBox = true;
-                                } else {
-                                    thisThis.collisions.rightBox = true;
-                                }
-                            }
-                            if (engine.haveIntersectionY(itemR, thisNpc)) {
-                                if (thisNpc.centerY > itemR.centerY) {
-                                    thisThis.collisions.topBox = true;
-                                } else {
-                                    thisThis.collisions.downBox = true;
+                    if (!engine.Intersection(itemR, thisNpc)) {
+                        item.attrs.classId.live = false;
+                        item.attrs.classId.entity.destroy();
+                        thisThis.hp -= item.attrs.classId.bullet.damage;
+                    }
+                }
+            });
+            mapChildrens.forEach(function (item) {
+                    var itemR = item.getClientRect();
+                    if (itemR.x > thisNpc.x - 200  && itemR.x < 200 + thisNpc.x) {
+                        if (itemR.y > thisNpc.y - 200  && itemR.y < 200 +thisNpc.y) {
+                            if (item.attrs.name !== 'npcEnemy' && item.attrs.name !== 'player' && item.attrs.name !== 'decoration') {
+                                if (!engine.Intersection(itemR, thisNpc)) {
+                                    itemR.centerX = itemR.x + itemR.width / 2;
+                                    itemR.centerY = itemR.y + itemR.height / 2;
+                                    thisNpc.centerX = thisNpc.x + thisNpc.width / 2;
+                                    thisNpc.centerY = thisNpc.y + thisNpc.height / 2;
+                                    if (engine.haveIntersectionX(itemR, thisNpc)) {
+                                        if (thisNpc.centerX > itemR.centerX) {
+                                            thisThis.collisions.leftBox = true;
+                                        } else {
+                                            thisThis.collisions.rightBox = true;
+                                        }
+                                    }
+                                    if (engine.haveIntersectionY(itemR, thisNpc)) {
+                                        if (thisNpc.centerY > itemR.centerY) {
+                                            thisThis.collisions.topBox = true;
+                                        } else {
+                                            thisThis.collisions.downBox = true;
+                                        }
+                                    }
                                 }
                             }
                         }
@@ -77,10 +93,11 @@ class NpcCore {
             );
             var x = this.entity.attrs.x;
             var y = this.entity.attrs.y;
-            var playerDistanceX = player.entity.x() - x;
-            var playerDistanceY = player.entity.y() - y;
+            //var player = layerHits.find('.player')[0];
+            var playerDistanceX = playerPosition.x - x;
+            var playerDistanceY = playerPosition.y - y;
             if (playerDistanceX < this.viewDistance && playerDistanceX > -this.viewDistance) {
-                var playerDirect = player.entity.getClientRect();
+                var playerDirect = playerData.getClientRect();
                 playerDirect.x = playerDirect.x + playerDirect.width / 2;
                 playerDirect.y = playerDirect.y + playerDirect.height / 2;
                 this.weapon.fire(this.entity.getClientRect(), playerDirect, false);
@@ -104,7 +121,7 @@ class NpcCore {
                 this.animator.stop();
                 this.entity.image(this.textures['front']);
             }
-        } else if(this.hp <= 0) {
+        } else if (this.hp <= 0) {
             if (this.live) {
                 this.live = false;
                 this.deadTimer = setInterval(function (npc) {
@@ -118,6 +135,7 @@ class NpcCore {
             }
         }
     }
+
     moveX(speed, direction) {
         var newX;
         if (direction === 'left') {
@@ -132,6 +150,7 @@ class NpcCore {
             }
         }
     }
+
     moveY(speed, direction) {
         var newY;
         if (direction === 'top') {

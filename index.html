@@ -6,9 +6,28 @@
     <link rel="stylesheet" href="css/game.css">
     <script src="js/framework/jquery-3.4.0.min.js"></script>
     <script src="js/framework/konva.min.js"></script>
-    <script src="js/entities/core.js"></script>
-    <!--<script src="js/entities/player.js"></script>
-    <script src="js/entities/Npc.js"></script>-->
+    <script src='js/core/EntityAnimation.js'></script>
+    <script src='js/core/BulletWorker.js'></script>
+    <script src='js/core/Inventory.js'></script>
+    <script src='js/core/Weapon.js'></script>
+    <script src='js/core/Bullet.js'></script>
+    <script src='js/core/Interface.js'></script>
+    <script src='js/entities/playerAlt.js'></script>
+    <script src='js/entities/decoration/DecorationCore.js'></script>
+    <script src='js/entities/decoration/DecBush.js'></script>
+    <script src='js/entities/decoration/DecRock.js'></script>
+    <script src='js/entities/blocks/BoxCore.js'></script>
+    <script src='js/entities/blocks/PlatformSmall.js'></script>
+    <script src='js/entities/blocks/PlatformMedium.js'></script>
+    <script src='js/entities/blocks/PlatformExtraBig.js'></script>
+    <script src='js/entities/blocks/PlatformBig.js'></script>
+    <script src='js/entities/blocks/PlatformSandSmall.js'></script>
+    <script src='js/entities/blocks/BoxMysterious.js'></script>
+    <script src='js/entities/items/ItemCore.js'></script>
+    <script src='js/entities/items/Heart.js'></script>
+    <script src='js/entities/npc/NpcCore.js'></script>
+    <script src='js/entities/npc/RedHead.js'></script>
+    <script src='js/entities/npc/BlueHead.js'></script>
     <script src="js/core/engine.js"></script>
     <script src="js/core/map.js"></script>
     <script src="maps/maps.js"></script>
@@ -51,12 +70,19 @@
     var bulletProto;
     var bulletClassProto;
     var stage;
+    var gameTimer;
+    var mapChildrens;
+    var playerData;
+    var playerPosition;
+    var mapChildrensAll;
+    var mapChildrensBullet;
+    var mapChildrensTemp;
     $(window).ready(function () {
         setTimeout(function () {
             engine.ini();
-            var gameTimer = setInterval(function () {
+            gameTimer = setInterval(function () {
                 engine.render();
             }, 33);
-        }, 2000);
+        }, 200);
     });
 </script>
