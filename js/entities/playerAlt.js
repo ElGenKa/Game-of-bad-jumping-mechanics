@@ -70,8 +70,8 @@ class Player {
                         if (item.attrs.t === 'BlockTeleport') {
                             var itemR = item.getClientRect();
                             if (!engine.Intersection(itemR, playerR)) {
-                                //console.log('1');
-                                if (engine.selectMap === maps.length) {
+                                console.log(maps);
+                                if (engine.selectMap === maps.length - 1) {
                                     engine.selectMap = 0;
                                 } else {
                                     engine.selectMap += 1;

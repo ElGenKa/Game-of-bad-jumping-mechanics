@@ -100,12 +100,15 @@
     });
     layerHits.on('click', function (evt) { //Клик мышки
         console.log(evt);
-        engine.selected = evt.target.attrs.parent;
-        if (evt.target.attrs.parent)
+
+        if (evt.target.attrs.parent) {
             $('#object_t').val(evt.target.attrs.parent.attrs.t);
-        else{
-            if(evt.target.attrs.tNpc)
+            engine.selected = evt.target.attrs.parent;
+        } else {
+            if (evt.target.attrs.tNpc) {
                 $('#object_t').val(evt.target.attrs.tNpc)
+                engine.selected = evt.target;
+            }
         }
 
     });

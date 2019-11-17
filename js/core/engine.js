@@ -184,7 +184,7 @@ engine = {
             player.animator = new EntityAnimation(player.entity);
             groupPlayer.add(player.entityHitBullets);
             layerHits.add(groupPlayer);
-            console.log(engine.selectMap);
+            //console.log(engine.selectMap);
             initMap(engine.selectMap);
         }
         playerData = layerHits.find('.player')[0];

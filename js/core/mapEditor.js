@@ -1,4 +1,4 @@
-    var engine;
+var engine;
 
 engine = {
     images: {},
@@ -69,7 +69,7 @@ engine = {
         for (var src in sources) {
             if (sources[src].count > 0) {
                 engine.images[src] = {count: sources[src].count};
-                for(var i = 0; i<sources.count; i++){
+                for (var i = 0; i < sources.count; i++) {
                     engine.images[src].image[i] = new Image();
                     engine.images[src].image[i].src = assetDir + sources[src].image[i];
                 }
@@ -118,14 +118,25 @@ engine = {
         var res = layerHits.children;
         var contentTemp = [];
         res.forEach(function (item) {
-            if(item.attrs.name === 'npcEnemy'){
-                contentTemp.push({x: item.x(), y: item.y(), t: item.attrs.tNpc});
-            }else if(item.attrs.name === 'mapGroup'){
-                item.children.each( function (itemEach) {
-                    contentTemp.push({x: itemEach.x(), y: itemEach.y(), t: itemEach.attrs.t, tNpc: itemEach.attrs.tNpc});
+            var name = item.name();
+            if (name == 'mapGroup') {
+                item.children.each(function (itemEach) {
+                    console.log(itemEach.attrs.tNpc);
+                    var useName;
+                    if(itemEach.name() === 'npcEnemy'){
+                        useName = itemEach.attrs.tNpc;
+                    }else{
+                        useName = itemEach.attrs.t;
+                    }
+                    contentTemp.push({
+                        x: itemEach.x(),
+                        y: itemEach.y(),
+                        t: useName
+                    });
                 });
-            }else{
-                contentTemp.push({x: item.x(), y: item.y(), t: item.attrs.t, tNpc: item.attrs.tNpc});
+                /*}else{
+                    contentTemp.push({x: item.x(), y: item.y(), t: item.attrs.t, tNpc: item.attrs.tNpc});
+                }*/
             }
         });
         var content = JSON.stringify(contentTemp);
@@ -140,21 +151,21 @@ engine = {
     newPlatform: function () {
         //console.log(layerHits.children);
         var mapGroup = layerHits.find('.mapGroup')[0];
-        mapGroup.add(new PlatformSmall(300 - mapGroup.x(),300 - mapGroup.y()));
+        mapGroup.add(new PlatformSmall(300 - mapGroup.x(), 300 - mapGroup.y()));
         //layerHits.add();
     },
 
     selected: null,
-    acceptBlock(){
+    acceptBlock() {
         console.log(engine.selected);
-        var entity = eval("new " + $('#object_t').val() + "("+engine.selected.x()+","+engine.selected.y()+")");
+        var entity = eval("new " + $('#object_t').val() + "(" + engine.selected.x() + "," + engine.selected.y() + ")");
         engine.selected.destroy();
         var mapGroup = layerHits.find('.mapGroup')[0];
         mapGroup.add(entity);
         console.log(entity);
     },
 
-    deleteBlock(){
+    deleteBlock() {
         engine.selected.destroy();
     }
 

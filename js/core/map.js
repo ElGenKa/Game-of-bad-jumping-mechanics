@@ -3,12 +3,12 @@ function initMap(map) {
     var blocks = [];
     var npc = [];
     maps[map].forEach(function (item) {
-        entity = eval("new " + item.t + "("+item.x+","+item.y+")");
-        if(entity.attrs.name === 'decoration') {
+        entity = eval("new " + item.t + "(" + item.x + "," + item.y + ")");
+        if (entity.attrs.name === 'decoration') {
             decoration.push(entity);
-        }else if(entity.attrs.name === 'npcEnemy'){
+        } else if (entity.attrs.name === 'npcEnemy') {
             npc.push(entity)
-        }else{
+        } else {
             blocks.push(entity);
         }
     });
@@ -21,8 +21,16 @@ function initMap(map) {
     blocks.forEach(function (item) {
         mapGroup.add(item);
     });
+
+    var drag = false;
+    if (engine.editor === 1)
+        npc.forEach(function (item) {
+            mapGroup.add(item);
+        });
+    else
+        npc.forEach(function (item) {
+            layerHits.add(item);
+        });
+
     layerHits.add(mapGroup);
-    npc.forEach(function (item) {
-        layerHits.add(item);
-    });
 }
