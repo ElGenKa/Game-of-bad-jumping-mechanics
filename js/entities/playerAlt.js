@@ -13,15 +13,15 @@ class Player {
         this.deadTimer = null;
         this.upgrades = {
             hp: {
-                scailMoney: 0.1,
+                scailMoney: 1.5,
                 lvl: 0
             },
             speed: {
-                scailMoney: 0.1,
+                scailMoney: 2.5,
                 lvl: 0
             },
             damage: {
-                scailMoney: 0.1,
+                scailMoney: 2,
                 lvl: 0
             },
         };
@@ -101,9 +101,9 @@ class Player {
                                         player.inventory.addScore(item.attrs.subParam);
                                         break;
                                     case 'heart':
-                                        player.hp += item.attrs.subParam;
-                                        if (player.hp > player.maxHp)
-                                            player.hp = player.maxHp;
+                                        player.hp += parseInt(item.attrs.subParam);
+                                        if (player.hp >= parseInt(player.maxHp))
+                                            player.hp = parseInt(player.maxHp);
                                         break;
                                 }
                                 item.destroy();

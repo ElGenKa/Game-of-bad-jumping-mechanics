@@ -16,6 +16,6 @@ class RedHead extends NpcCore {
             h: 10
         };
 
-        return super(x, y, textures, 50, 50, 100, 100, true, 500, 'RedHead', weapon, 2);
+        return super(x, y, textures, 50, 50, 10, 100, true, 500, 'RedHead', weapon, 2);
     }
 }

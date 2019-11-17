@@ -69,6 +69,7 @@
 <script>
     $('#upgradeDamage').on('click', function () {
         if(player.inventory.score >= $('#upgradeDamage').data('money')){
+            player.upgrades.damage.lvl +=1;
             player.weapon.damage += 10;
             player.inventory.score -= $('#upgradeDamage').data('money');
         }
@@ -76,6 +77,7 @@
     });
     $('#upgradeHp').on('click', function () {
         if(player.inventory.score >= $('#upgradeHp').data('money')){
+            player.upgrades.hp.lvl +=1;
             player.weapon.maxHp += 25;
             player.weapon.hp += 25;
             player.inventory.score -= $('#upgradeHp').data('money');
@@ -84,6 +86,7 @@
     });
     $('#upgradeSpeed').on('click', function () {
         if(player.inventory.score >= $('#upgradeSpeed').data('money')){
+            player.upgrades.speed.lvl +=1;
             player.speed +=0.25;
             player.inventory.score -= $('#upgradeSpeed').data('money');
         }
@@ -91,8 +94,8 @@
     });
     function drawButtons() {
         $('#mCount').html( player.inventory.score );
-        var moneyHP = 100 * (100 * player.upgrades.hp.lvl * player.upgrades.hp.scailMoney);
-        var moneySpeed = 100 * (100 * player.upgrades.speed.lvl * player.upgrades.speed.scailMoney);
+        var moneyHP = 100 + (100 * player.upgrades.hp.lvl * player.upgrades.hp.scailMoney);
+        var moneySpeed = 100 + (100 * player.upgrades.speed.lvl * player.upgrades.speed.scailMoney);
         var moneyDamage = 100 + (100 * player.upgrades.damage.lvl * player.upgrades.damage.scailMoney);
         $('#upgradeDamage').html('Улучшить урон ('+moneyDamage+' модулей)').data('money', moneyDamage);
         $('#upgradeHp').html('Улучшить здоровье ('+moneyHP+' модулей)').data('money', moneyHP);

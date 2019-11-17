@@ -17,6 +17,6 @@ class BlueHead extends NpcCore {
             damage: 10
         };
 
-        return super(x, y, textures, 50, 50, 200, 200, true, 500, 'BlueHead', weapon, 1);
+        return super(x, y, textures, 50, 50, 50, 200, true, 500, 'BlueHead', weapon, 1);
     }
 }

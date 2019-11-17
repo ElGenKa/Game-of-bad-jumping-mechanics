@@ -131,7 +131,7 @@ class NpcCore {
                         var score = new ItemScore(npc.entity.x()+10,npc.entity.y()+10,npc.addScore);
                         if(Math.floor(Math.random() * Math.floor(10)) < 4)
                             var heart = new ItemHeart(npc.entity.x(),npc.entity.y(),10);
-
+                        npc.hpBar.destroy();
                         clearInterval(npc.deadTimer);
                         npc.entity.destroy();
                     }
