@@ -144,6 +144,16 @@ engine = {
             stage.add(layerInterface);
             this.isInit = true;
         } else {
+            this.npcs.forEach(function (item) {
+                item.live = false;
+                item.entity.destroy();
+                item.hpBar.destroy();
+            });
+            this.bullets.forEach(function (item) {
+                item.live = false;
+            });
+            this.npcs = [];
+            this.bullets = [];
             layerHits.destroy();
             layerHits = new Konva.Layer();
             groupPlayer = new Konva.Group({
@@ -154,7 +164,7 @@ engine = {
                 height: playerSize.h
             });
             stage.add(layerHits);
-
+            initMap(engine.selectMap);
             player.entity = new Konva.Image({
                 image: engine.images['playerLeft'],
                 x: 0,
@@ -184,8 +194,7 @@ engine = {
             player.animator = new EntityAnimation(player.entity);
             groupPlayer.add(player.entityHitBullets);
             layerHits.add(groupPlayer);
-            //console.log(engine.selectMap);
-            initMap(engine.selectMap);
+
         }
         playerData = layerHits.find('.player')[0];
         playerPosition = {

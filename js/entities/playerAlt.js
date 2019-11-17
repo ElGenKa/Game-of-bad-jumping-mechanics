@@ -280,6 +280,11 @@ class Player {
         if (this.keys.r) {
             this.weapon.reload();
         }
+        if(this.hp<0){
+            this.hp = this.hpMax;
+            engine.selectMap = 0;
+            engine.ini();
+        }
     }
 
     moveX(speed, direction) {
