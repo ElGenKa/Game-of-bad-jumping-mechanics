@@ -74,11 +74,11 @@ engine = {
         groupPlayer.add(player.entity);
         player.entityHitBox = new Konva.Rect({
             x: 16,
-            y: playerSize.h - 23,
+            y: playerSize.h - 35,
             name: 'player',
             subName: 'hitBox',
-            height: 23,
-            width: 33,
+            height: 35,
+            width: 35,
             fill: 'rgba(255,244,0,0.1)'
         });
         groupPlayer.add(player.entityHitBox);
@@ -293,19 +293,10 @@ engine = {
     moveAllEntities: function (x = 0, y = 0) {
         var moveDis = {x: 0, y: 0};
         layerHits.children.each(function (item) {
-            //console.log(item);
             if (item.attrs.name !== 'player') {
                 moveDis.x = x;
                 moveDis.y = y;
                 item.move(moveDis);
-                /*if (x) {
-                    var newX = item.x() + x;
-                    item.x(newX);
-                }
-                if (y) {
-                    var newY = item.y() + y;
-                    item.y(newY);
-                }*/
             }
         });
     },

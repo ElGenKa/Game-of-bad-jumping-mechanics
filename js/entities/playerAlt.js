@@ -70,7 +70,6 @@ class Player {
                 };
                 //var textBoxes = [];
                 mapChildrens.forEach(function (item) {
-                        //var playerR = player.entityHitBox.attrs;
                         if (item.attrs.name === 'box') {
                             var itemR = item.getClientRect();
                             if (itemR.x > 200 && itemR.x < 600 + itemR.width) {
@@ -99,48 +98,56 @@ class Player {
                                         faceItem.top.x = itemR.x + itemR.width / 2;
                                         faceItem.top.y = itemR.y;
 
+                                        faceItem.left.x = itemR.x;
+                                        faceItem.left.y = itemR.y + itemR.height / 2;
+
+                                        faceItem.right.x = itemR.x + itemR.width;
+                                        faceItem.right.y = itemR.y + itemR.height / 2;
+
                                         faceItem.bottom.x = itemR.x + itemR.width / 2;
                                         faceItem.bottom.y = itemR.y + itemR.height;
 
-                                        //Если мы правее, то проверяем левую грань игрока
-                                        if (itemR.centerX < playerR.centerX) {
+                                        var disTop = Math.sqrt(Math.pow(playerR.centerX - faceItem.top.x,2) + Math.pow(playerR.centerY - faceItem.top.y,2));
+                                        var disBot = Math.sqrt(Math.pow(playerR.centerX - faceItem.bottom.x,2) + Math.pow(playerR.centerY - faceItem.bottom.y,2));
+                                        var disLeft = Math.sqrt(Math.pow(playerR.centerX - faceItem.left.x,2) + Math.pow(playerR.centerY - faceItem.left.y,2));
+                                        var disRight = Math.sqrt(Math.pow(playerR.centerX - faceItem.right.x,2) + Math.pow(playerR.centerY - faceItem.right.y,2));
+
+                                        if (itemR.centerX < playerR.centerX && (disRight < disTop && disRight < disBot)) {
                                             faceItem.x = itemR.x + itemR.width;
                                             faceItem.y = itemR.y + itemR.height;
+                                            console.log(1);
                                             if (facePlayer.left.x < faceItem.x) { //Если грань игрока в за гранью блока
                                                 if (Math.abs(facePlayer.left.y - faceItem.y) < itemR.height) {
                                                     player.collisions.leftBox = true;
-                                                    console.log(1);
                                                     return true;
                                                 }
                                             }
 
-                                        }
-                                        if (itemR.centerX > playerR.centerX) { //Если левее
+                                        } else if (itemR.centerX > playerR.centerX && (disLeft < disTop && disLeft < disBot)) { //Если левее
                                             faceItem.x = itemR.x;
                                             faceItem.y = itemR.y + itemR.height;
+                                            console.log(2);
                                             if (facePlayer.right.x > faceItem.x) { //Если грань игрока в за гранью блока
                                                 if (Math.abs(facePlayer.right.y - faceItem.y) < itemR.height) {
                                                     player.collisions.rightBox = true;
-                                                    console.log(2);
                                                     return true;
                                                 }
                                             }
 
-                                        }
-                                        if (playerR.centerY < itemR.centerY) { //Ниже
+                                        } else if (playerR.centerY < itemR.centerY && (disTop < disLeft || disTop < disRight)) { //Ниже
                                             faceItem.x = itemR.x + itemR.width / 2;
                                             faceItem.y = itemR.y;
+                                            console.log(3);
                                             if (facePlayer.bottom.y > faceItem.y) { //Если грань игрока в за гранью блока
                                                 if (Math.abs(facePlayer.bottom.x - faceItem.x) < itemR.width) {
                                                     player.collisions.downBox = true;
-                                                    //console.log(3);
                                                     return true;
                                                 }
                                             }
-                                        }
-                                        if (playerR.centerY > itemR.centerY) { //выше
+                                        } else if (playerR.centerY > itemR.centerY && (disBot < disLeft || disBot < disRight)) { //выше
                                             faceItem.x = itemR.x + itemR.width / 2;
                                             faceItem.y = itemR.y + itemR.height;
+                                            console.log(3);
                                             if (facePlayer.top.y < faceItem.y) { //Если грань игрока в за гранью блока
                                                 if (Math.abs(facePlayer.top.x - faceItem.x) < itemR.width) {
                                                     player.collisions.topBox = true;

@@ -55,17 +55,12 @@ engine = {
     },
 
     moveAllEntities: function (x = 0, y = 0) {
+        var moveDis = {x: 0, y: 0};
         layerHits.children.each(function (item) {
-            //console.log(item);
             if (item.attrs.name !== 'player') {
-                if (x) {
-                    var newX = item.attrs.x + x;
-                    item.x(newX);
-                }
-                if (y) {
-                    var newY = item.attrs.y + y;
-                    item.y(newY);
-                }
+                moveDis.x = x;
+                moveDis.y = y;
+                item.move(moveDis);
             }
         });
     },
@@ -131,6 +126,10 @@ engine = {
         res.forEach(function (item) {
             if(item.attrs.name === 'npcEnemy'){
                 contentTemp.push({x: item.x(), y: item.y(), t: item.attrs.tNpc});
+            }else if(item.attrs.name === 'mapGroup'){
+                item.children.each( function (itemEach) {
+                    contentTemp.push({x: itemEach.x(), y: itemEach.y(), t: itemEach.attrs.t, tNpc: itemEach.attrs.tNpc});
+                });
             }else{
                 contentTemp.push({x: item.x(), y: item.y(), t: item.attrs.t, tNpc: item.attrs.tNpc});
             }
@@ -146,15 +145,26 @@ engine = {
     },
 
     newPlatform: function () {
-        layerHits.add(new PlatformMedium(300,300));
+        //console.log(layerHits.children);
+        var mapGroup = layerHits.find('.mapGroup')[0];
+        mapGroup.add(new PlatformSmall(300 - mapGroup.x(),300 - mapGroup.y()));
+        //layerHits.add();
     },
 
     selected: null,
     acceptBlock(){
         var entity = eval("new " + $('#object_t').val() + "("+engine.selected.x()+","+engine.selected.y()+")");
         engine.selected.destroy();
-        layerHits.add(entity);
+        var mapGroup = layerHits.find('.mapGroup')[0];
+        mapGroup.add(entity);
         console.log(entity);
+    },
+
+    deleteBlock(){
+        //var entity = eval("new " + $('#object_t').val() + "("+engine.selected.x()+","+engine.selected.y()+")");
+        engine.selected.destroy();
+        //layerHits.add(entity);
+        //console.log(entity);
     }
 
 };

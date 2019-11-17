@@ -47,7 +47,7 @@ class BoxCore {
             }
         }
 
-        var hitBox;
+        /*var hitBox;
         //HitBox
         //left
         hitBox = new Konva.Rect({
@@ -92,7 +92,7 @@ class BoxCore {
             id: 'hitBox',
             fill: 'hellow'
         });
-        group.add(hitBox);
+        group.add(hitBox);*/
 
         group.attrs.upd = function (itemSender) {
             mapChildrensBullet.each(function (item) {
