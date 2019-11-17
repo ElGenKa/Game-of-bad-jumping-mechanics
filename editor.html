@@ -1,6 +1,10 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
+    <script>
+       if(!localStorage.getItem('selectMap'))
+           localStorage.setItem('selectMap', 0);
+    </script>
     <meta charset="UTF-8">
     <title>Simple Platformer</title>
     <link rel="stylesheet" href="css/game.css">
@@ -38,9 +42,8 @@
 <div class="container">
     <div class="row">
         <div class="col-12 mb-2">
-            <a href="#" class="mapSelector" id="loadLvl1" data-map="0">Уровень 1</a>
-            <a href="#" class="mapSelector" id="loadLvl2" data-map="1">Уровень 2</a>
-            <a href="#" class="mapSelector" id="loadLvl3" data-map="2">Уровень 3</a>
+            <input value="0" id="selectMap" onchange="localStorage.setItem('selectMap', $('#selectMap').val()); location.reload()">
+            <script>$('#selectMap').val(localStorage.getItem('selectMap'))</script>
             <a href="index.html" data-map="map01">Игра</a>
             <button onclick="engine.download();">Сохранить</button>
         </div>

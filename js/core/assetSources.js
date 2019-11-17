@@ -145,29 +145,29 @@ var sources = {
     redHeadAnimateLeft: {
         count: 2,
         image: [
-            'download/Enemies/blockerBody.png',
-            'download/Enemies/blockerBody.png'
+            'download/Enemies/blockerBodyLeft.png',
+            'download/Enemies/blockerBodyLeft.png'
         ]
     },
     redHeadAnimateRight: {
         count: 2,
         image: [
-            'download/Enemies/blockerBody.png',
-            'download/Enemies/blockerBody.png'
+            'download/Enemies/blockerBodyRight.png',
+            'download/Enemies/blockerBodyRight.png'
         ]
     },
     redHeadAnimateTop: {
         count: 2,
         image: [
-            'download/Enemies/blockerBody.png',
-            'download/Enemies/blockerBody.png'
+            'download/Enemies/blockerBodyTop.png',
+            'download/Enemies/blockerBodyTop.png'
         ]
     },
     redHeadAnimateDown: {
         count: 2,
         image: [
-            'download/Enemies/blockerBody.png',
-            'download/Enemies/blockerBody.png'
+            'download/Enemies/blockerBodyDown.png',
+            'download/Enemies/blockerBodyDown.png'
         ]
     },
     redHeadFront: 'download/Enemies/blockerBody.png',

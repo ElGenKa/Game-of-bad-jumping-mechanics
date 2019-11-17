@@ -11,6 +11,20 @@ class Player {
         this.hpBar = null;
         this.speed = 10;
         this.deadTimer = null;
+        this.upgrades = {
+            hp: {
+                scailMoney: 0.1,
+                lvl: 0
+            },
+            speed: {
+                scailMoney: 0.1,
+                lvl: 0
+            },
+            damage: {
+                scailMoney: 0.1,
+                lvl: 0
+            },
+        };
         this.collisions = {
             checkCollision: function () {
                 player.collisions.leftBox = player.collisions.topBox = player.collisions.rightBox = player.collisions.downBox = false;

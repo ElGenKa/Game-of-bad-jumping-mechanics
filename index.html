@@ -39,9 +39,6 @@
 <div class="container">
     <div class="row">
         <div class="col-12 mb-2">
-            <a href="#" class="mapSelector" id="loadLvl1" data-map="0">Уровень 1</a>
-            <a href="#" class="mapSelector" id="loadLvl2" data-map="1">Уровень 2</a>
-            <a href="#" class="mapSelector" id="loadLvl3" data-map="2">Уровень 3</a>
             <a href="editor.html" data-map="map01">Редактор</a>
         </div>
         <div class="col-12">
@@ -60,12 +57,46 @@
 
 <div class="modal">
     <div class="modal-content">
-        test.
+        <h3>Улучшения</h3>
+        <i><img width="25" src="assets/score.png"> Модулей собрано: <b id="mCount">1</b></i><br>
+        <button id="upgradeDamage" data-money="0">Улучшить урон</button>
+        <button id="upgradeHp" data-money="0">Улучшить максимальное здоровье</button>
+        <button id="upgradeSpeed" data-money="0">Улучшить скорость передвижения</button>
     </div>
 </div>
 </body>
 </html>
 <script>
+    $('#upgradeDamage').on('click', function () {
+        if(player.inventory.score >= $('#upgradeDamage').data('money')){
+            player.weapon.damage += 10;
+            player.inventory.score -= $('#upgradeDamage').data('money');
+        }
+        drawButtons();
+    });
+    $('#upgradeHp').on('click', function () {
+        if(player.inventory.score >= $('#upgradeHp').data('money')){
+            player.weapon.maxHp += 25;
+            player.weapon.hp += 25;
+            player.inventory.score -= $('#upgradeHp').data('money');
+        }
+        drawButtons();
+    });
+    $('#upgradeSpeed').on('click', function () {
+        if(player.inventory.score >= $('#upgradeSpeed').data('money')){
+            player.speed +=0.25;
+            player.inventory.score -= $('#upgradeSpeed').data('money');
+        }
+        drawButtons();
+    });
+    function drawButtons() {
+        var moneyHP = 100 * (100 * player.upgrades.hp.lvl * player.upgrades.hp.scailMoney);
+        var moneySpeed = 100 * (100 * player.upgrades.speed.lvl * player.upgrades.speed.scailMoney);
+        var moneyDamage = 100 + (100 * player.upgrades.damage.lvl * player.upgrades.damage.scailMoney);
+        $('#upgradeDamage').html('Улучшить урон ('+moneyDamage+' модулей)').data('money', moneyDamage);
+        $('#upgradeHp').html('Улучшить здоровье ('+moneyHP+' модулей)').data('money', moneyHP);
+        $('#upgradeSpeed').html('Улучшить скорсоть бега ('+moneySpeed+' модулей)').data('money', moneySpeed);
+    };
     var layerHits;
     var layerInterface;
     var layerFon;

@@ -144,6 +144,13 @@ engine = {
             stage.add(layerInterface);
             this.isInit = true;
         } else {
+            if(engine.selectMap === 0){
+                $('.modal').show();
+                $('#mCount').html( player.inventory.score );
+                drawButtons();
+            }else{
+                $('.modal').hide();
+            }
             this.npcs.forEach(function (item) {
                 item.live = false;
                 item.entity.destroy();
