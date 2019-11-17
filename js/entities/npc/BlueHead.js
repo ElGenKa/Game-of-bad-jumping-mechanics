@@ -1,11 +1,11 @@
 class BlueHead extends NpcCore {
     constructor(x, y) {
         var textures = {
-            'front': engine.images['redHeadFront'],
-            'left': engine.images['redHeadAnimateLeft'],
-            'right': engine.images['redHeadAnimateRight'],
-            'top': engine.images['redHeadAnimateTop'],
-            'down': engine.images['redHeadAnimateDown'],
+            'front': engine.images['blueHeadFront'],
+            'left': engine.images['blueHeadAnimateLeft'],
+            'right': engine.images['blueHeadAnimateRight'],
+            'top': engine.images['blueHeadAnimateTop'],
+            'down': engine.images['blueHeadAnimateDown'],
         };
 
         var weapon = {

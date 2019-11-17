@@ -7,8 +7,8 @@ class Interface {
         var hpBar = player.hpBar;
         var hpBarDown = hpBar.down;
         var hpBarUp = hpBar.up;
-        var playerHP = player.hp;
-        var playerHPMax = player.hpMax;
+        var playerHP = parseInt(player.hp);
+        var playerHPMax = parseInt(player.hpMax);
         var barColor;
         var procentHp = (playerHP / playerHPMax) * 100;
         if (procentHp === 100) {

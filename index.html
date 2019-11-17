@@ -30,6 +30,7 @@
     <script src='js/entities/npc/NpcCore.js'></script>
     <script src='js/entities/npc/RedHead.js'></script>
     <script src='js/entities/npc/BlueHead.js'></script>
+    <script src='js/entities/npc/BossOne.js'></script>
     <script src="js/core/engine.js"></script>
     <script src="js/core/map.js"></script>
     <script src="maps/maps.js"></script>
@@ -78,8 +79,8 @@
     $('#upgradeHp').on('click', function () {
         if(player.inventory.score >= $('#upgradeHp').data('money')){
             player.upgrades.hp.lvl +=1;
-            player.weapon.maxHp += 25;
-            player.weapon.hp += 25;
+            player.hpMax += 25;
+            player.hp += 25;
             player.inventory.score -= $('#upgradeHp').data('money');
         }
         drawButtons();

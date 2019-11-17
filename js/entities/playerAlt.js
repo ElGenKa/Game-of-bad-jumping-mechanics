@@ -102,8 +102,8 @@ class Player {
                                         break;
                                     case 'heart':
                                         player.hp += parseInt(item.attrs.subParam);
-                                        if (player.hp >= parseInt(player.maxHp))
-                                            player.hp = parseInt(player.maxHp);
+                                        if (player.hp >= parseInt(player.hpMax))
+                                            player.hp = parseInt(player.hpMax);
                                         break;
                                 }
                                 item.destroy();

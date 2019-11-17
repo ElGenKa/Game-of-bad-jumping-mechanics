@@ -170,7 +170,68 @@ var sources = {
             'download/Enemies/blockerBodyDown.png'
         ]
     },
+
+    blueHeadAnimateLeft: {
+        count: 2,
+        image: [
+            'download/Enemies/blockerBodyLeftAlt.png',
+            'download/Enemies/blockerBodyLeftAlt.png'
+        ]
+    },
+    blueHeadAnimateRight: {
+        count: 2,
+        image: [
+            'download/Enemies/blockerBodyRightAlt.png',
+            'download/Enemies/blockerBodyRightAlt.png'
+        ]
+    },
+    blueHeadAnimateTop: {
+        count: 2,
+        image: [
+            'download/Enemies/blockerBodyTopAlt.png',
+            'download/Enemies/blockerBodyTopAlt.png'
+        ]
+    },
+    blueHeadAnimateDown: {
+        count: 2,
+        image: [
+            'download/Enemies/blockerBodyDownAlt.png',
+            'download/Enemies/blockerBodyDownAlt.png'
+        ]
+    },
+
+
+    madHeadAnimateLeft: {
+        count: 2,
+        image: [
+            'download/Enemies/blockerMad.png',
+            'download/Enemies/blockerMad.png'
+        ]
+    },
+    madHeadAnimateRight: {
+        count: 2,
+        image: [
+            'download/Enemies/blockerMad.png',
+            'download/Enemies/blockerMad.png'
+        ]
+    },
+    madHeadAnimateTop: {
+        count: 2,
+        image: [
+            'download/Enemies/blockerBodyTopAlt.png',
+            'download/Enemies/blockerMad.png'
+        ]
+    },
+    madHeadAnimateDown: {
+        count: 2,
+        image: [
+            'download/Enemies/blockerMad.png',
+            'download/Enemies/blockerMad.png'
+        ]
+    },
     redHeadFront: 'download/Enemies/blockerBody.png',
+    blueHeadFront: 'download/Enemies/blockerBodyAlt.png',
+    madHeadFront: 'download/Enemies/blockerMad.png',
     playerFront: 'download/Player/playerFront.png',
     //Старые текстуры
     bgInterface: 'bgInterface.png',
